@@ -4,10 +4,11 @@ using System.Linq;
 using GitCommands.Config;
 using GitUIPluginInterfaces;
 
+// lalalalal
 namespace GitCommands
 {
     public class GitRef : IGitRef
-    {
+    { /* kakakakaka */
         private readonly string _mergeSettingName;
         private readonly string _remoteSettingName;
 

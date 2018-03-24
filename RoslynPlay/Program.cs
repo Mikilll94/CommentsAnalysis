@@ -1,10 +1,9 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Microsoft.CodeAnalysis;
 
 namespace RoslynPlay
 {
@@ -17,7 +16,6 @@ namespace RoslynPlay
             var root = tree.GetRoot();
             var walker = new Walker();
             walker.Visit(root);
-
             Console.ReadKey();
         }
     }
@@ -26,10 +24,36 @@ namespace RoslynPlay
     {
         int i = 0;
 
-        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        //public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        //{
+        //    Console.WriteLine($"{(++i).ToString()}.\nName: {node.Identifier}" +
+        //        $"\nLocation: {node.GetLocation().GetLineSpan().StartLinePosition.Line + 1}");
+        //    base.VisitMethodDeclaration(node);
+        //}
+        public Walker() : base(SyntaxWalkerDepth.StructuredTrivia)
         {
-            Console.WriteLine($"{(++i).ToString()}. Name: {node.Identifier} Location: {node.GetLocation().GetLineSpan().StartLinePosition.Line + 1}");
-            base.VisitMethodDeclaration(node);
+
+        }
+
+        public override void VisitTrivia(SyntaxTrivia trivia)
+        {
+            if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia ||
+                trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
+            {
+                Console.WriteLine($"{++i}. {trivia}\nKind: {trivia.Kind()}" +
+                    $"\nLocation: {trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1}");
+            }
+            base.VisitTrivia(trivia);
+        }
+
+        public override void Visit(SyntaxNode node)
+        {
+            if (node.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
+            {
+                Console.WriteLine($"{++i} {node.ToString()} Kind: {node.Kind()}" +
+                    $"\nLocation: {node.GetLocation().GetLineSpan().StartLinePosition.Line + 1}");
+            }
+            base.Visit(node);
         }
     }
 }
