@@ -1,9 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using OfficeOpenXml;
 using System;
 using System.IO;
-using System.Linq;
+using System.Text;
 
 namespace RoslynPlay
 {
@@ -11,49 +11,46 @@ namespace RoslynPlay
     {
         static void Main(string[] args)
         {
-            string fileContent = File.ReadAllText("GitRef.cs");
-            var tree = CSharpSyntaxTree.ParseText(fileContent);
-            var root = tree.GetRoot();
-            var walker = new Walker();
-            walker.Visit(root);
+            string fileContent;
+            SyntaxTree tree;
+            SyntaxNode root;
+            SyntaxWalker walker;
+            string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/gitextensions-master", $"*.cs", SearchOption.AllDirectories);
+            foreach (var file in files)
+            {
+                fileContent = File.ReadAllText(file);
+                tree = CSharpSyntaxTree.ParseText(fileContent);
+                root = tree.GetRoot();
+                walker = new SyntaxWalker(file);
+                walker.Visit(root);
+            }
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            FileInfo xlsxFile = new FileInfo(@"comments.xlsx");
+            using (ExcelPackage package = new ExcelPackage(xlsxFile))
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Worksheet");
+                worksheet.Cells[1, 1].Value = "File";
+                worksheet.Cells[1, 2].Value = "Line";
+                worksheet.Cells[1, 3].Value = "Comment";
+                worksheet.Cells[1, 4].Value = "Type";
+                worksheet.Cells[1, 5].Value = "Words count";
+
+                int rowNumber = 2;
+
+                foreach (var comment in CommentsStore.Comments)
+                {
+                    worksheet.Cells[rowNumber, 1].Value = comment.FileName;
+                    worksheet.Cells[rowNumber, 2].Value = comment.LineNumber;
+                    worksheet.Cells[rowNumber, 3].Value = comment.Content;
+                    worksheet.Cells[rowNumber, 4].Value = comment.Type;
+                    worksheet.Cells[rowNumber, 5].Value = comment.WordsCount;
+                    rowNumber++;
+                }
+                package.Save();
+            }
+            Console.WriteLine("Finished");
             Console.ReadKey();
-        }
-    }
-
-    public class Walker : CSharpSyntaxWalker
-    {
-        int i = 0;
-
-        //public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
-        //{
-        //    Console.WriteLine($"{(++i).ToString()}.\nName: {node.Identifier}" +
-        //        $"\nLocation: {node.GetLocation().GetLineSpan().StartLinePosition.Line + 1}");
-        //    base.VisitMethodDeclaration(node);
-        //}
-        public Walker() : base(SyntaxWalkerDepth.StructuredTrivia)
-        {
-
-        }
-
-        public override void VisitTrivia(SyntaxTrivia trivia)
-        {
-            if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia ||
-                trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
-            {
-                Console.WriteLine($"{++i}. {trivia}\nKind: {trivia.Kind()}" +
-                    $"\nLocation: {trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1}");
-            }
-            base.VisitTrivia(trivia);
-        }
-
-        public override void Visit(SyntaxNode node)
-        {
-            if (node.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
-            {
-                Console.WriteLine($"{++i} {node.ToString()} Kind: {node.Kind()}" +
-                    $"\nLocation: {node.GetLocation().GetLineSpan().StartLinePosition.Line + 1}");
-            }
-            base.Visit(node);
         }
     }
 }
