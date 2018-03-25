@@ -41,7 +41,8 @@ namespace RoslynPlay
                 foreach (var comment in CommentsStore.Comments)
                 {
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
-                    worksheet.Cells[rowNumber, 2].Value = comment.LineNumber;
+                    worksheet.Cells[rowNumber, 2].Value
+                        = comment.LineEnd != -1 ? $"{comment.LineNumber}-{comment.LineEnd}" : comment.LineNumber.ToString();
                     worksheet.Cells[rowNumber, 3].Value = comment.Content;
                     worksheet.Cells[rowNumber, 4].Value = comment.Type;
                     worksheet.Cells[rowNumber, 5].Value = comment.WordsCount;

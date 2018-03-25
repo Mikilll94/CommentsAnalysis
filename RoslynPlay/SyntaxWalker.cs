@@ -32,6 +32,7 @@ namespace RoslynPlay
                 CommentsStore.Comments.Add(new Comment(content)
                 {
                     LineNumber = trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
+                    LineEnd = trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1,
                     Type = "multi_line_comment",
                     FileName = visitedFile,
                 });
@@ -48,6 +49,7 @@ namespace RoslynPlay
                 CommentsStore.Comments.Add(new Comment(content)
                 {
                     LineNumber = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
+                    LineEnd = node.GetLocation().GetLineSpan().EndLinePosition.Line,
                     Type = "single_line_doc",
                     FileName = visitedFile,
                 });
@@ -59,6 +61,7 @@ namespace RoslynPlay
                 CommentsStore.Comments.Add(new Comment(node.ToString())
                 {
                     LineNumber = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
+                    LineEnd = node.GetLocation().GetLineSpan().EndLinePosition.Line + 1,
                     Type = "multi_line_doc",
                     FileName = visitedFile,
                 });

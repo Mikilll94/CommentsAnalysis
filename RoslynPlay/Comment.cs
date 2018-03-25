@@ -8,8 +8,11 @@ namespace RoslynPlay
         public int LineNumber { get; set; }
         public string Type { get; set; }
 
+        public int LineEnd { get; set; } = -1;
+
         public string Content { get; }
         public int WordsCount { get; }
+
 
         public Comment(string content)
         {
