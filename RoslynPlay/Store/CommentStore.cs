@@ -2,7 +2,7 @@
 
 namespace RoslynPlay
 {
-    static class CommentsStore
+    static class CommentStore
     {
         public static List<Comment> Comments { get; set; } = new List<Comment>();
     }

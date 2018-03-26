@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System.Text.RegularExpressions;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RoslynPlay
 {
@@ -18,7 +19,7 @@ namespace RoslynPlay
             if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
             {
                 string content = trivia.ToString();
-                CommentsStore.Comments.Add(new Comment(content.Substring(content.IndexOf("//") + 2))
+                CommentStore.Comments.Add(new Comment(content.Substring(content.IndexOf("//") + 2))
                 {
                     LineNumber = trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
                     Type = "single_line_comment",
@@ -29,7 +30,7 @@ namespace RoslynPlay
             {
                 string content = trivia.ToString();
                 content = new Regex(@"\/\*(.*)\*\/", RegexOptions.Singleline).Match(content).Groups[1].ToString();
-                CommentsStore.Comments.Add(new Comment(content)
+                CommentStore.Comments.Add(new Comment(content)
                 {
                     LineNumber = trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
                     LineEnd = trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1,
@@ -40,13 +41,13 @@ namespace RoslynPlay
             base.VisitTrivia(trivia);
         }
 
-        public override void Visit(SyntaxNode node)
+        public override void VisitDocumentationCommentTrivia(DocumentationCommentTriviaSyntax node)
         {
             if (node.Kind() == SyntaxKind.SingleLineDocumentationCommentTrivia)
             {
                 string content = node.ToString();
                 content = new Regex(@"(\/\/\/)").Replace(content, "");
-                CommentsStore.Comments.Add(new Comment(content)
+                CommentStore.Comments.Add(new Comment(content)
                 {
                     LineNumber = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
                     LineEnd = node.GetLocation().GetLineSpan().EndLinePosition.Line,
@@ -58,7 +59,7 @@ namespace RoslynPlay
             {
                 string content = node.ToString();
                 content = new Regex(@"(\/\/\/)").Replace(content, "");
-                CommentsStore.Comments.Add(new Comment(node.ToString())
+                CommentStore.Comments.Add(new Comment(node.ToString())
                 {
                     LineNumber = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
                     LineEnd = node.GetLocation().GetLineSpan().EndLinePosition.Line + 1,
@@ -66,7 +67,19 @@ namespace RoslynPlay
                     FileName = visitedFile,
                 });
             }
-            base.Visit(node);
+            base.VisitDocumentationCommentTrivia(node);
+        }
+
+        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        {
+            MethodStore.Methods.Add(new Method()
+            {
+                Name = node.Identifier.ToString(),
+                FileName = visitedFile,
+                LineNumber = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
+                LineEnd = node.GetLocation().GetLineSpan().EndLinePosition.Line + 1,
+            });
+            base.VisitMethodDeclaration(node);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace RoslynPlay
 
                 int rowNumber = 2;
 
-                foreach (var comment in CommentsStore.Comments)
+                foreach (var comment in CommentStore.Comments)
                 {
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value
@@ -48,6 +48,22 @@ namespace RoslynPlay
                     worksheet.Cells[rowNumber, 5].Value = comment.WordsCount;
                     rowNumber++;
                 }
+
+                ExcelWorksheet worksheet2 = package.Workbook.Worksheets.Add("Methods");
+                worksheet2.Cells[1, 1].Value = "Name";
+                worksheet2.Cells[1, 2].Value = "File";
+                worksheet2.Cells[1, 3].Value = "Line";
+
+                rowNumber = 2;
+
+                foreach (var method in MethodStore.Methods)
+                {
+                    worksheet2.Cells[rowNumber, 1].Value = method.Name;
+                    worksheet2.Cells[rowNumber, 2].Value = method.FileName;
+                    worksheet2.Cells[rowNumber, 3].Value = $"{method.LineNumber}-{method.LineEnd}";
+                    rowNumber++;
+                }
+
                 package.Save();
             }
             Console.WriteLine("Finished");
