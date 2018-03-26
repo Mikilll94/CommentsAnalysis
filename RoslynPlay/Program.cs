@@ -64,6 +64,19 @@ namespace RoslynPlay
                     rowNumber++;
                 }
 
+                ExcelWorksheet worksheet3 = package.Workbook.Worksheets.Add("Locations");
+                worksheet3.Cells[1, 1].Value = "Line";
+                worksheet3.Cells[1, 2].Value = "Location";
+
+                rowNumber = 2;
+
+                foreach (var commentLocation in CommentLocationStore.CommentLocations)
+                {
+                    worksheet3.Cells[rowNumber, 1].Value = commentLocation.Key;
+                    worksheet3.Cells[rowNumber, 2].Value = commentLocation.Value;
+                    rowNumber++;
+                }
+
                 package.Save();
             }
             Console.WriteLine("Finished");
