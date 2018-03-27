@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using OfficeOpenXml;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -23,6 +24,7 @@ namespace RoslynPlay
                 fileContent = File.ReadAllText(file);
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
+                CommentLocationStore.CommentLocations.Clear();
                 methodWalker = new MethodSyntaxWalker(file);
                 methodWalker.Visit(root);
                 commentWalker = new CommentSyntaxWalker(file);
@@ -38,7 +40,8 @@ namespace RoslynPlay
                 worksheet.Cells[1, 2].Value = "Line";
                 worksheet.Cells[1, 3].Value = "Comment";
                 worksheet.Cells[1, 4].Value = "Type";
-                worksheet.Cells[1, 5].Value = "Words count";
+                worksheet.Cells[1, 5].Value = "Location";
+                worksheet.Cells[1, 6].Value = "Words count";
 
                 int rowNumber = 2;
 
@@ -49,7 +52,8 @@ namespace RoslynPlay
                         = comment.LineEnd != -1 ? $"{comment.LineNumber}-{comment.LineEnd}" : comment.LineNumber.ToString();
                     worksheet.Cells[rowNumber, 3].Value = comment.Content;
                     worksheet.Cells[rowNumber, 4].Value = comment.Type;
-                    worksheet.Cells[rowNumber, 5].Value = comment.WordsCount;
+                    worksheet.Cells[rowNumber, 5].Value = comment.CommentLocation;
+                    worksheet.Cells[rowNumber, 6].Value = comment.WordsCount;
                     rowNumber++;
                 }
 

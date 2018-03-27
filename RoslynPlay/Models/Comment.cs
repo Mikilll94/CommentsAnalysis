@@ -8,17 +8,23 @@ namespace RoslynPlay
         public int LineNumber { get; set; }
         public string Type { get; set; }
 
-        public int LineEnd { get; set; } = -1;
-
         public string Content { get; }
+        public int LineEnd { get; }
+        public string CommentLocation { get; } = "unknown";
         public int WordsCount { get; }
 
-
-        public Comment(string content)
+        public Comment(string content, int lineEnd)
         {
             Content = content;
             char[] delimiters = new char[] { ' ', '\r', '\n' };
             WordsCount = Content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
+
+            LineEnd = lineEnd;
+
+            if (CommentLocationStore.CommentLocations.ContainsKey(LineEnd))
+            {
+                CommentLocation = CommentLocationStore.CommentLocations[LineEnd];
+            }
         }
     }
 }

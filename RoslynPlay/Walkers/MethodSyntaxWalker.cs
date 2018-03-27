@@ -8,7 +8,7 @@ namespace RoslynPlay
     {
         string visitedFile;
 
-        public MethodSyntaxWalker(string fileName) : base(SyntaxWalkerDepth.StructuredTrivia)
+        public MethodSyntaxWalker(string fileName)
         {
             visitedFile = fileName;
         }
