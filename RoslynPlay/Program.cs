@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using OfficeOpenXml;
 using System;
 using System.IO;
@@ -14,15 +15,18 @@ namespace RoslynPlay
             string fileContent;
             SyntaxTree tree;
             SyntaxNode root;
-            SyntaxWalker walker;
+            CommentSyntaxWalker commentWalker;
+            MethodSyntaxWalker methodWalker;
             string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/gitextensions-master", $"*.cs", SearchOption.AllDirectories);
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
-                walker = new SyntaxWalker(file);
-                walker.Visit(root);
+                methodWalker = new MethodSyntaxWalker(file);
+                methodWalker.Visit(root);
+                commentWalker = new CommentSyntaxWalker(file);
+                commentWalker.Visit(root);
             }
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
