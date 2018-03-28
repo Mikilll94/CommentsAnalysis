@@ -19,6 +19,7 @@ namespace RoslynPlay
             CommentSyntaxWalker commentWalker;
             MethodSyntaxWalker methodWalker;
             string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/gitextensions-master", $"*.cs", SearchOption.AllDirectories);
+            var commentStore = new CommentStore();
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
@@ -27,7 +28,7 @@ namespace RoslynPlay
                 var commentLocationStore = new CommentLocationStore();
                 methodWalker = new MethodSyntaxWalker(file, commentLocationStore);
                 methodWalker.Visit(root);
-                commentWalker = new CommentSyntaxWalker(file, commentLocationStore);
+                commentWalker = new CommentSyntaxWalker(file, commentLocationStore, commentStore);
                 commentWalker.Visit(root);
             }
 
@@ -45,7 +46,7 @@ namespace RoslynPlay
 
                 int rowNumber = 2;
 
-                foreach (var comment in CommentStore.Comments)
+                foreach (var comment in commentStore.Comments)
                 {
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value

@@ -2,7 +2,7 @@
 
 namespace RoslynPlay
 {
-    class Comment
+    public class Comment
     {
         public string FileName { get; set; }
         public int LineNumber { get; set; }

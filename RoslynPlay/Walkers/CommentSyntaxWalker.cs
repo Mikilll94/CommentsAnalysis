@@ -8,12 +8,15 @@ namespace RoslynPlay
     {
         private string _fileName;
         private CommentLocationStore _commentLocationStore;
+        private CommentStore _commentStore;
 
-        public CommentSyntaxWalker(string fileName, CommentLocationStore commentLocationStore)
+        public CommentSyntaxWalker(string fileName, CommentLocationStore commentLocationStore,
+            CommentStore commentStore)
             : base(SyntaxWalkerDepth.StructuredTrivia)
         {
             _fileName = fileName;
             _commentLocationStore = commentLocationStore;
+            _commentStore = commentStore;
         }
 
         public override void VisitTrivia(SyntaxTrivia trivia)
@@ -21,14 +24,14 @@ namespace RoslynPlay
             if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia
                 || trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
             {
-                CommentStore.AddCommentTrivia(trivia, _commentLocationStore, _fileName);
+                _commentStore.AddCommentTrivia(trivia, _commentLocationStore, _fileName);
             }
             base.VisitTrivia(trivia);
         }
 
         public override void VisitDocumentationCommentTrivia(DocumentationCommentTriviaSyntax node)
         {
-            CommentStore.AddCommentNode(node, _commentLocationStore, _fileName);
+            _commentStore.AddCommentNode(node, _commentLocationStore, _fileName);
             base.VisitDocumentationCommentTrivia(node);
         }
     }

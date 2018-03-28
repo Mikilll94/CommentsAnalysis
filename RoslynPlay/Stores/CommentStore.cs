@@ -6,11 +6,11 @@ using System.Text.RegularExpressions;
 
 namespace RoslynPlay
 {
-    static class CommentStore
+    public class CommentStore
     {
-        public static List<Comment> Comments { get; set; } = new List<Comment>();
+        public List<Comment> Comments { get; } = new List<Comment>();
 
-        public static void AddCommentTrivia(SyntaxTrivia trivia,
+        public void AddCommentTrivia(SyntaxTrivia trivia,
             CommentLocationStore commentLocationstore, string fileName)
         {
             string content = trivia.ToString();
@@ -31,7 +31,7 @@ namespace RoslynPlay
             });
         }
 
-        public static void AddCommentNode(DocumentationCommentTriviaSyntax node,
+        public void AddCommentNode(DocumentationCommentTriviaSyntax node,
             CommentLocationStore commentLocationstore, string fileName)
         {
             string content = node.ToString();
