@@ -2,8 +2,10 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text;
 
@@ -49,14 +51,29 @@ namespace RoslynPlay
 
                 foreach (var comment in commentStore.Comments)
                 {
+                    ExcelRange wordsCountCell = worksheet.Cells[rowNumber, 4];
+
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value
                         = comment.LineEnd != -1 ? $"{comment.LineNumber}-{comment.LineEnd}" : comment.LineNumber.ToString();
                     worksheet.Cells[rowNumber, 3].Value = comment.Type;
-                    worksheet.Cells[rowNumber, 4].Value = comment.WordsCount;
+                    wordsCountCell.Value = comment.WordsCount;
                     worksheet.Cells[rowNumber, 5].Value = comment.CommentLocation;
                     worksheet.Cells[rowNumber, 6].Value = comment.MethodName;
                     worksheet.Cells[rowNumber, 7].Value = comment.Content;
+
+                    if (wordsCountCell.Value != null && wordsCountCell.Value.ToString() != "0")
+                    {
+                        wordsCountCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        if (int.Parse(wordsCountCell.Value.ToString()) > 2)
+                        {
+                            wordsCountCell.Style.Fill.BackgroundColor.SetColor(Color.LightGreen);
+                        }
+                        else
+                        {
+                            wordsCountCell.Style.Fill.BackgroundColor.SetColor(Color.IndianRed);
+                        }
+                    }
                     rowNumber++;
                 }
 
