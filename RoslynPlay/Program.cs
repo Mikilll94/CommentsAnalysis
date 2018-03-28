@@ -6,6 +6,7 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace RoslynPlay
 {
@@ -36,12 +37,13 @@ namespace RoslynPlay
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
+                string filePath = new Regex(@"gitextensions-master\\(.*)$").Match(file).Groups[1].ToString();
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
                 var commentLocationStore = new CommentLocationStore();
-                methodWalker = new MethodSyntaxWalker(file, commentLocationStore);
+                methodWalker = new MethodSyntaxWalker(filePath, commentLocationStore);
                 methodWalker.Visit(root);
-                commentWalker = new CommentSyntaxWalker(file, commentLocationStore, commentStore);
+                commentWalker = new CommentSyntaxWalker(filePath, commentLocationStore, commentStore);
                 commentWalker.Visit(root);
             }
 
