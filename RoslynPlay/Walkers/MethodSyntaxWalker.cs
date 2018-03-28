@@ -6,11 +6,13 @@ namespace RoslynPlay
 {
     class MethodSyntaxWalker : CSharpSyntaxWalker
     {
-        string visitedFile;
+        private string _fileName;
+        private CommentLocationStore _commentLocationStore;
 
-        public MethodSyntaxWalker(string fileName)
+        public MethodSyntaxWalker(string fileName, CommentLocationStore commentLocationStore)
         {
-            visitedFile = fileName;
+            _fileName = fileName;
+            _commentLocationStore = commentLocationStore;
         }
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
@@ -21,15 +23,15 @@ namespace RoslynPlay
             MethodStore.Methods.Add(new Method()
             {
                 Name = node.Identifier.ToString(),
-                FileName = visitedFile,
+                FileName = _fileName,
                 LineNumber = startLine,
                 LineEnd = endLine,
             });
 
-            CommentLocationStore.CommentLocations.TryAdd(startLine - 1, $"method_description {visitedFile}");
-            CommentLocationStore.CommentLocations.TryAdd(startLine, $"method_start {visitedFile}");
-            CommentLocationStore.AddCommentLocation(startLine + 1, endLine - 1, $"method_inner {visitedFile}");
-            CommentLocationStore.CommentLocations.TryAdd(endLine, $"method_end {visitedFile}");
+            _commentLocationStore.AddCommentLocation(startLine - 1, "method_description");
+            _commentLocationStore.AddCommentLocation(startLine, "method_start");
+            _commentLocationStore.AddCommentLocation(startLine + 1, endLine - 1, "method_inner");
+            _commentLocationStore.AddCommentLocation(endLine, "method_end");
             base.VisitMethodDeclaration(node);
         }
     }

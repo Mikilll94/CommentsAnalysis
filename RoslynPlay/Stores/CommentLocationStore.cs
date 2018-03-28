@@ -2,13 +2,18 @@
 
 namespace RoslynPlay
 {
-    static class CommentLocationStore
+    public class CommentLocationStore
     {
-        public static Dictionary<int, string> CommentLocations { get; set; } = new Dictionary<int, string>();
+        public Dictionary<int, string> CommentLocations { get; } = new Dictionary<int, string>();
 
-        public static void AddCommentLocation(int start, int end, string location)
+        public void AddCommentLocation(int line, string location)
         {
-            for (int i = start; i <= end; i++)
+            CommentLocations.TryAdd(line, location);
+        }
+
+        public void AddCommentLocation(int startLine, int endLine, string location)
+        {
+            for (int i = startLine; i <= endLine; i++)
             {
                 CommentLocations.TryAdd(i, location);
             }

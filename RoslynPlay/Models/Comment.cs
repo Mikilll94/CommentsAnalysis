@@ -13,18 +13,20 @@ namespace RoslynPlay
         public string CommentLocation { get; } = "unknown";
         public int WordsCount { get; }
 
-        public Comment(string content, int lineEnd)
+        public Comment(string content, int lineEnd, CommentLocationStore commentLocationstore)
         {
             Content = content;
+            LineEnd = lineEnd;
+
             char[] delimiters = new char[] { ' ', '\r', '\n' };
             WordsCount = Content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
 
-            LineEnd = lineEnd;
-
-            if (CommentLocationStore.CommentLocations.ContainsKey(LineEnd))
+            if (commentLocationstore.CommentLocations.ContainsKey(LineEnd))
             {
-                CommentLocation = CommentLocationStore.CommentLocations[LineEnd];
+                CommentLocation = commentLocationstore.CommentLocations[LineEnd];
             }
         }
+
+
     }
 }

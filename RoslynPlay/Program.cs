@@ -24,10 +24,10 @@ namespace RoslynPlay
                 fileContent = File.ReadAllText(file);
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
-                CommentLocationStore.CommentLocations.Clear();
-                methodWalker = new MethodSyntaxWalker(file);
+                var commentLocationStore = new CommentLocationStore();
+                methodWalker = new MethodSyntaxWalker(file, commentLocationStore);
                 methodWalker.Visit(root);
-                commentWalker = new CommentSyntaxWalker(file);
+                commentWalker = new CommentSyntaxWalker(file, commentLocationStore);
                 commentWalker.Visit(root);
             }
 
@@ -69,19 +69,6 @@ namespace RoslynPlay
                     worksheet2.Cells[rowNumber, 1].Value = method.Name;
                     worksheet2.Cells[rowNumber, 2].Value = method.FileName;
                     worksheet2.Cells[rowNumber, 3].Value = $"{method.LineNumber}-{method.LineEnd}";
-                    rowNumber++;
-                }
-
-                ExcelWorksheet worksheet3 = package.Workbook.Worksheets.Add("Locations");
-                worksheet3.Cells[1, 1].Value = "Line";
-                worksheet3.Cells[1, 2].Value = "Location";
-
-                rowNumber = 2;
-
-                foreach (var commentLocation in CommentLocationStore.CommentLocations)
-                {
-                    worksheet3.Cells[rowNumber, 1].Value = commentLocation.Key;
-                    worksheet3.Cells[rowNumber, 2].Value = commentLocation.Value;
                     rowNumber++;
                 }
 
