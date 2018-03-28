@@ -23,10 +23,9 @@ namespace RoslynPlay
                 content = new Regex(@"\/\*(.*)\*\/", RegexOptions.Singleline).Match(content).Groups[1].ToString();
             }
             Comments.Add(new Comment(content, trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1,
-                commentLocationstore)
+                trivia.Kind().ToString(), commentLocationstore)
             {
                 LineNumber = trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
-                Type = trivia.Kind().ToString(),
                 FileName = fileName,
             });
         }
@@ -36,12 +35,10 @@ namespace RoslynPlay
         {
             string content = node.ToString();
             content = new Regex(@"(\/\/\/)").Replace(content, "");
-            Comments.Add(new Comment(content,
-                node.GetLocation().GetLineSpan().EndLinePosition.Line,
-                commentLocationstore)
+            Comments.Add(new Comment(content, node.GetLocation().GetLineSpan().EndLinePosition.Line,
+                node.Kind().ToString(), commentLocationstore)
             {
                 LineNumber = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
-                Type = node.Kind().ToString(),
                 FileName = fileName,
             });
         }

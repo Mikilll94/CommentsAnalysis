@@ -39,11 +39,11 @@ namespace RoslynPlay
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Worksheet");
                 worksheet.Cells[1, 1].Value = "File";
                 worksheet.Cells[1, 2].Value = "Line";
-                worksheet.Cells[1, 3].Value = "Comment";
-                worksheet.Cells[1, 4].Value = "Type";
+                worksheet.Cells[1, 3].Value = "Type";
+                worksheet.Cells[1, 4].Value = "Words count";
                 worksheet.Cells[1, 5].Value = "Location";
                 worksheet.Cells[1, 6].Value = "Method name";
-                worksheet.Cells[1, 7].Value = "Words count";
+                worksheet.Cells[1, 7].Value = "Comment";
 
                 int rowNumber = 2;
 
@@ -52,11 +52,11 @@ namespace RoslynPlay
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value
                         = comment.LineEnd != -1 ? $"{comment.LineNumber}-{comment.LineEnd}" : comment.LineNumber.ToString();
-                    worksheet.Cells[rowNumber, 3].Value = comment.Content;
-                    worksheet.Cells[rowNumber, 4].Value = comment.Type;
+                    worksheet.Cells[rowNumber, 3].Value = comment.Type;
+                    worksheet.Cells[rowNumber, 4].Value = comment.WordsCount;
                     worksheet.Cells[rowNumber, 5].Value = comment.CommentLocation;
                     worksheet.Cells[rowNumber, 6].Value = comment.MethodName;
-                    worksheet.Cells[rowNumber, 7].Value = comment.WordsCount;
+                    worksheet.Cells[rowNumber, 7].Value = comment.Content;
                     rowNumber++;
                 }
 
