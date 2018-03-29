@@ -59,9 +59,10 @@ namespace RoslynPlay
                 worksheet.Cells[1, 5].Value = "Has \"nothing\"";
                 worksheet.Cells[1, 6].Value = "Has !";
                 worksheet.Cells[1, 7].Value = "Has ?";
-                worksheet.Cells[1, 8].Value = "Location";
-                worksheet.Cells[1, 9].Value = "Method name";
-                worksheet.Cells[1, 10].Value = "Comment";
+                worksheet.Cells[1, 8].Value = "Has code";
+                worksheet.Cells[1, 9].Value = "Location";
+                worksheet.Cells[1, 10].Value = "Method name";
+                worksheet.Cells[1, 11].Value = "Comment";
 
                 int rowNumber = 2;
 
@@ -71,18 +72,20 @@ namespace RoslynPlay
                     ExcelRange hasNothingCell = worksheet.Cells[rowNumber, 5];
                     ExcelRange hasExclamationMarkCell = worksheet.Cells[rowNumber, 6];
                     ExcelRange hasQuestionMarkCell = worksheet.Cells[rowNumber, 7];
+                    ExcelRange hasCodeCell = worksheet.Cells[rowNumber, 8];
 
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value
                         = comment.LineEnd != -1 ? $"{comment.LineNumber}-{comment.LineEnd}" : comment.LineNumber.ToString();
                     worksheet.Cells[rowNumber, 3].Value = comment.Type;
-                    wordsCountCell.Value = comment.WordsCount;
-                    hasNothingCell.Value = comment.HasNothing;
-                    hasExclamationMarkCell.Value = comment.HasExclamationMark;
-                    hasQuestionMarkCell.Value = comment.HasQuestionMark;
-                    worksheet.Cells[rowNumber, 8].Value = comment.CommentLocation;
-                    worksheet.Cells[rowNumber, 9].Value = comment.MethodName;
-                    worksheet.Cells[rowNumber, 10].Value = comment.Content;
+                    wordsCountCell.Value = comment.Statistics.WordsCount;
+                    hasNothingCell.Value = comment.Statistics.HasNothing;
+                    hasExclamationMarkCell.Value = comment.Statistics.HasExclamationMark;
+                    hasQuestionMarkCell.Value = comment.Statistics.HasQuestionMark;
+                    hasCodeCell.Value = comment.Statistics.HasCode;
+                    worksheet.Cells[rowNumber, 9].Value = comment.Statistics.CommentLocation;
+                    worksheet.Cells[rowNumber, 10].Value = comment.Statistics.MethodName;
+                    worksheet.Cells[rowNumber, 11].Value = comment.Content;
 
                     if (wordsCountCell.Value != null && wordsCountCell.Value.ToString() != "0")
                     {
@@ -91,6 +94,7 @@ namespace RoslynPlay
                     FormatCells(hasNothingCell, bool.Parse(hasNothingCell.Value.ToString()));
                     FormatCells(hasExclamationMarkCell, bool.Parse(hasExclamationMarkCell.Value.ToString()));
                     FormatCells(hasQuestionMarkCell, bool.Parse(hasQuestionMarkCell.Value.ToString()));
+                    FormatCells(hasCodeCell, bool.Parse(hasCodeCell.Value.ToString()));
 
                     rowNumber++;
                 }
