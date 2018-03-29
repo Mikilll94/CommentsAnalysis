@@ -63,9 +63,10 @@ namespace RoslynPlay
                 worksheet.Cells[1, 6].Value = "Has !";
                 worksheet.Cells[1, 7].Value = "Has ?";
                 worksheet.Cells[1, 8].Value = "Has code";
-                worksheet.Cells[1, 9].Value = "Location";
-                worksheet.Cells[1, 10].Value = "Method name";
-                worksheet.Cells[1, 11].Value = "Comment";
+                worksheet.Cells[1, 9].Value = "Coherence coefficient";
+                worksheet.Cells[1, 10].Value = "Location";
+                worksheet.Cells[1, 11].Value = "Method name";
+                worksheet.Cells[1, 12].Value = "Comment";
 
                 int rowNumber = 2;
 
@@ -86,9 +87,10 @@ namespace RoslynPlay
                     hasExclamationMarkCell.Value = comment.Statistics.HasExclamationMark;
                     hasQuestionMarkCell.Value = comment.Statistics.HasQuestionMark;
                     hasCodeCell.Value = comment.Statistics.HasCode;
-                    worksheet.Cells[rowNumber, 9].Value = comment.Statistics.CommentLocation;
-                    worksheet.Cells[rowNumber, 10].Value = comment.Statistics.MethodName;
-                    worksheet.Cells[rowNumber, 11].Value = comment.Content;
+                    worksheet.Cells[rowNumber, 9].Value = comment.Statistics.CoherenceCoefficient;
+                    worksheet.Cells[rowNumber, 10].Value = comment.Statistics.CommentLocation;
+                    worksheet.Cells[rowNumber, 11].Value = comment.Statistics.MethodName;
+                    worksheet.Cells[rowNumber, 12].Value = comment.Content;
 
                     FormatCell(wordsCountCell, comment.Statistics.WordsCountBad());
                     FormatCell(hasNothingCell, comment.Statistics.HasNothing);

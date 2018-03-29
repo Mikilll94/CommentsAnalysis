@@ -15,10 +15,11 @@ namespace RoslynPlay
         public bool? HasQuestionMark { get; }
         public bool? HasExclamationMark { get; }
         public bool? HasCode { get; }
+        public double? CoherenceCoefficient { get; }
 
         public Statistics(string content, int lineEnd, string type, CommentLocationStore commentLocationstore)
         {
-            char[] delimiters = new char[] { ' ', '\r', '\n' };
+            char[] delimiters = new char[] { ' ', '\t', '\r', '\n' };
             if (type == "SingleLineCommentTrivia")
             {
                 WordsCount = content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
@@ -57,6 +58,13 @@ namespace RoslynPlay
                 }
             }
             HasCode = (double)linesWithCode / linesCount > 0.1;
+
+            if (MethodName != "No method" && CommentLocation == "method_description")
+            {
+                string[] methodNameWords = Regex.Replace(MethodName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ").Split(" ");
+                string[] contentWords = content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+                CoherenceCoefficient = LevenshteinDistance.Compute(contentWords, methodNameWords);
+            }
         }
 
         public bool? WordsCountBad()
@@ -69,7 +77,6 @@ namespace RoslynPlay
             {
                 return WordsCount <= 2;
             }
-
         }
 
     }
