@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -12,16 +13,18 @@ namespace RoslynPlay
 {
     class Program
     {
-        static void FormatCells(ExcelRange cells, bool condition)
+        static void FormatCell(ExcelRange cells, bool? condition)
         {
+            if (condition == null) return;
+
             cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            if (condition)
+            if ((bool)condition)
             {
-                cells.Style.Fill.BackgroundColor.SetColor(Color.LightGreen);
+                cells.Style.Fill.BackgroundColor.SetColor(Color.IndianRed);
             }
             else
             {
-                cells.Style.Fill.BackgroundColor.SetColor(Color.IndianRed);
+                cells.Style.Fill.BackgroundColor.SetColor(Color.LightGreen);
             }
         }
 
@@ -87,14 +90,11 @@ namespace RoslynPlay
                     worksheet.Cells[rowNumber, 10].Value = comment.Statistics.MethodName;
                     worksheet.Cells[rowNumber, 11].Value = comment.Content;
 
-                    if (wordsCountCell.Value != null && wordsCountCell.Value.ToString() != "0")
-                    {
-                        FormatCells(wordsCountCell, int.Parse(wordsCountCell.Value.ToString()) > 2);
-                    }
-                    FormatCells(hasNothingCell, bool.Parse(hasNothingCell.Value.ToString()));
-                    FormatCells(hasExclamationMarkCell, bool.Parse(hasExclamationMarkCell.Value.ToString()));
-                    FormatCells(hasQuestionMarkCell, bool.Parse(hasQuestionMarkCell.Value.ToString()));
-                    FormatCells(hasCodeCell, bool.Parse(hasCodeCell.Value.ToString()));
+                    FormatCell(wordsCountCell, comment.Statistics.WordsCountBad());
+                    FormatCell(hasNothingCell, comment.Statistics.HasNothing);
+                    FormatCell(hasExclamationMarkCell, comment.Statistics.HasExclamationMark);
+                    FormatCell(hasQuestionMarkCell, comment.Statistics.HasQuestionMark);
+                    FormatCell(hasCodeCell, comment.Statistics.HasCode);
 
                     rowNumber++;
                 }

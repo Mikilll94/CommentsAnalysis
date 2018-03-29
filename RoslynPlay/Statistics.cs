@@ -58,5 +58,19 @@ namespace RoslynPlay
             }
             HasCode = (double)linesWithCode / linesCount > 0.1;
         }
+
+        public bool? WordsCountBad()
+        {
+            if (WordsCount == null || WordsCount == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return WordsCount <= 2;
+            }
+
+        }
+
     }
 }
