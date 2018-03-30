@@ -77,6 +77,7 @@ namespace RoslynPlay
                     ExcelRange hasExclamationMarkCell = worksheet.Cells[rowNumber, 6];
                     ExcelRange hasQuestionMarkCell = worksheet.Cells[rowNumber, 7];
                     ExcelRange hasCodeCell = worksheet.Cells[rowNumber, 8];
+                    ExcelRange coherenceCoefficientCell = worksheet.Cells[rowNumber, 9];
 
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value
@@ -87,7 +88,7 @@ namespace RoslynPlay
                     hasExclamationMarkCell.Value = comment.Statistics.HasExclamationMark;
                     hasQuestionMarkCell.Value = comment.Statistics.HasQuestionMark;
                     hasCodeCell.Value = comment.Statistics.HasCode;
-                    worksheet.Cells[rowNumber, 9].Value = comment.Statistics.CoherenceCoefficient;
+                    coherenceCoefficientCell.Value = comment.Statistics.CoherenceCoefficient;
                     worksheet.Cells[rowNumber, 10].Value = comment.Statistics.CommentLocation;
                     worksheet.Cells[rowNumber, 11].Value = comment.Statistics.MethodName;
                     worksheet.Cells[rowNumber, 12].Value = comment.Content;
@@ -97,6 +98,7 @@ namespace RoslynPlay
                     FormatCell(hasExclamationMarkCell, comment.Statistics.HasExclamationMark);
                     FormatCell(hasQuestionMarkCell, comment.Statistics.HasQuestionMark);
                     FormatCell(hasCodeCell, comment.Statistics.HasCode);
+                    FormatCell(coherenceCoefficientCell, comment.Statistics.CoherenceCoefficientBad());
 
                     rowNumber++;
                 }

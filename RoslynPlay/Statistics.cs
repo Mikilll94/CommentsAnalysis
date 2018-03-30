@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -9,7 +10,7 @@ namespace RoslynPlay
     public class Statistics
     {
         public string CommentLocation { get; } = "Unknown";
-        public string MethodName { get; } = "No method";
+        public string MethodName { get; }
         public int? WordsCount { get; }
         public bool? HasNothing { get; }
         public bool? HasQuestionMark { get; }
@@ -59,11 +60,16 @@ namespace RoslynPlay
             }
             HasCode = (double)linesWithCode / linesCount > 0.1;
 
-            if (MethodName != "No method" && CommentLocation == "method_description")
+            if (MethodName != null && CommentLocation == "method_description")
             {
                 string[] methodNameWords = Regex.Replace(MethodName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ").Split(" ");
+                methodNameWords = methodNameWords.Where(word => word.Length > 2).ToArray();
+
+                content = Regex.Replace(content, "[.,]", "");
+                content = Regex.Replace(content, "(<.*?>)", "");
                 string[] contentWords = content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                CoherenceCoefficient = LevenshteinDistance.Compute(contentWords, methodNameWords);
+                contentWords = contentWords.Where(word => word.Length > 2).ToArray();
+                CoherenceCoefficient = RoslynPlay.CoherenceCoefficient.Compute(contentWords, methodNameWords);
             }
         }
 
@@ -76,6 +82,18 @@ namespace RoslynPlay
             else
             {
                 return WordsCount <= 2;
+            }
+        }
+
+        public bool? CoherenceCoefficientBad()
+        {
+            if (CoherenceCoefficient == null)
+            {
+                return null;
+            }
+            else
+            {
+                return CoherenceCoefficient == 0 || CoherenceCoefficient > 0.5;
             }
         }
 

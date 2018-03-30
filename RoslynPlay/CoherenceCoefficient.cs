@@ -2,7 +2,7 @@
 
 namespace RoslynPlay
 {
-    public static class LevenshteinDistance
+    public static class CoherenceCoefficient
     {
         public static double Compute(string[] commentWords, string[] methodWords)
         {
