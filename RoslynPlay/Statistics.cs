@@ -9,7 +9,7 @@ namespace RoslynPlay
 {
     public class Statistics
     {
-        public string CommentLocation { get; } = "Unknown";
+        public string CommentLocation { get; }
         public string MethodName { get; }
         public int? WordsCount { get; }
         public bool? HasNothing { get; }
@@ -21,7 +21,7 @@ namespace RoslynPlay
         public Statistics(string content, int lineEnd, string type, CommentLocationStore commentLocationstore)
         {
             char[] delimiters = new char[] { ' ', '\t', '\r', '\n' };
-            if (type == "SingleLineCommentTrivia")
+            if (type == "single_line_comment")
             {
                 WordsCount = content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
             }
@@ -66,7 +66,6 @@ namespace RoslynPlay
                 methodNameWords = methodNameWords.Where(word => word.Length > 2).ToArray();
 
                 content = Regex.Replace(content, "[.,]", "");
-                content = Regex.Replace(content, "(<.*?>)", "");
                 string[] contentWords = content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
                 contentWords = contentWords.Where(word => word.Length > 2).ToArray();
                 CoherenceCoefficient = RoslynPlay.CoherenceCoefficient.Compute(contentWords, methodNameWords);

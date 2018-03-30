@@ -80,8 +80,7 @@ namespace RoslynPlay
                     ExcelRange coherenceCoefficientCell = worksheet.Cells[rowNumber, 9];
 
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
-                    worksheet.Cells[rowNumber, 2].Value
-                        = comment.LineEnd != -1 ? $"{comment.LineNumber}-{comment.LineEnd}" : comment.LineNumber.ToString();
+                    worksheet.Cells[rowNumber, 2].Value = comment.GetLinesRange();
                     worksheet.Cells[rowNumber, 3].Value = comment.Type;
                     wordsCountCell.Value = comment.Statistics.WordsCount;
                     hasNothingCell.Value = comment.Statistics.HasNothing;

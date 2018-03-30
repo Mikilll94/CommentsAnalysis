@@ -1,28 +1,18 @@
-﻿using System;
-using System.Text.RegularExpressions;
-
-namespace RoslynPlay
+﻿namespace RoslynPlay
 {
-    public class Comment
+    public abstract class Comment
     {
         public string FileName { get; set; }
-        public int LineNumber { get; set; }
+        public string Content { get; set; }
+        public int LineStart { get; set; }
+        public int LineEnd { get; set; }
+        public string Type { get; set; }
+        public Statistics Statistics { get; set; }
 
-        public string Content { get; }
-        public int LineEnd { get; }
-        public string Type { get; }
-
-        public Statistics Statistics { get; }
-
-        public Comment(string content, int lineEnd, string type,
-            CommentLocationStore commentLocationstore)
+        public Comment()
         {
-            Content = content;
-            LineEnd = lineEnd;
-            Type = type;
-            Statistics = new Statistics(content, lineEnd, type, commentLocationstore);
         }
 
-
+        public abstract string GetLinesRange();
     }
 }

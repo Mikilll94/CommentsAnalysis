@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace RoslynPlay
 {
@@ -13,32 +12,33 @@ namespace RoslynPlay
         public void AddCommentTrivia(SyntaxTrivia trivia,
             CommentLocationStore commentLocationstore, string fileName)
         {
-            string content = trivia.ToString();
             if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
             {
-                content = content.Substring(content.IndexOf("//") + 2);
+                Comments.Add(new SingleLineComment(trivia.ToString(),
+                    trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1, commentLocationstore)
+                {
+                    FileName = fileName,
+                });
             }
             else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
             {
-                content = new Regex(@"\/\*(.*)\*\/", RegexOptions.Singleline).Match(content).Groups[1].ToString();
+                Comments.Add(new MultiLineComment(trivia.ToString(),
+                    trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
+                    trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1, commentLocationstore)
+                {
+                    FileName = fileName,
+                });
             }
-            Comments.Add(new Comment(content, trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1,
-                trivia.Kind().ToString(), commentLocationstore)
-            {
-                LineNumber = trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
-                FileName = fileName,
-            });
         }
 
         public void AddCommentNode(DocumentationCommentTriviaSyntax node,
             CommentLocationStore commentLocationstore, string fileName)
         {
-            string content = node.ToString();
-            content = new Regex(@"(\/\/\/)").Replace(content, "");
-            Comments.Add(new Comment(content, node.GetLocation().GetLineSpan().EndLinePosition.Line,
-                node.Kind().ToString(), commentLocationstore)
+            Comments.Add(new DocComment(node.ToString(),
+                node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
+                node.GetLocation().GetLineSpan().EndLinePosition.Line,
+                commentLocationstore)
             {
-                LineNumber = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
                 FileName = fileName,
             });
         }
