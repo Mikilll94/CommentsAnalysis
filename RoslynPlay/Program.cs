@@ -3,7 +3,6 @@ using Microsoft.CodeAnalysis.CSharp;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Text;
@@ -15,16 +14,14 @@ namespace RoslynPlay
     {
         static void FormatCell(ExcelRange cells, bool? condition)
         {
-            if (condition == null) return;
-
-            cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            if ((bool)condition)
+            if (condition == null)
             {
-                cells.Style.Fill.BackgroundColor.SetColor(Color.IndianRed);
+                return;
             }
             else
             {
-                cells.Style.Fill.BackgroundColor.SetColor(Color.LightGreen);
+                cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                cells.Style.Fill.BackgroundColor.SetColor((bool)condition ? Color.IndianRed : Color.LightGreen);
             }
         }
 
@@ -35,7 +32,8 @@ namespace RoslynPlay
             SyntaxNode root;
             CommentSyntaxWalker commentWalker;
             MethodSyntaxWalker methodWalker;
-            string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/gitextensions-master", $"*.cs", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/gitextensions-master", $"*.cs",
+                SearchOption.AllDirectories);
             var commentStore = new CommentStore();
             foreach (var file in files)
             {
@@ -102,21 +100,10 @@ namespace RoslynPlay
                     rowNumber++;
                 }
 
-                ExcelWorksheet worksheet2 = package.Workbook.Worksheets.Add("Methods");
-                worksheet2.Cells[1, 1].Value = "Name";
-                worksheet2.Cells[1, 2].Value = "File";
-                worksheet2.Cells[1, 3].Value = "Line";
-
-                rowNumber = 2;
-
-                foreach (var method in MethodStore.Methods)
+                for (int i = 2; i <= 10; i++)
                 {
-                    worksheet2.Cells[rowNumber, 1].Value = method.Name;
-                    worksheet2.Cells[rowNumber, 2].Value = method.FileName;
-                    worksheet2.Cells[rowNumber, 3].Value = $"{method.LineNumber}-{method.LineEnd}";
-                    rowNumber++;
+                    worksheet.Column(i).AutoFit();
                 }
-
                 package.Save();
             }
             Console.WriteLine("Finished");
