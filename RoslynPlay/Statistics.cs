@@ -35,40 +35,11 @@ namespace RoslynPlay
             HasNothing = new Regex("nothing", RegexOptions.IgnoreCase).IsMatch(content);
             HasQuestionMark = new Regex(@"\?").IsMatch(content);
             HasExclamationMark = new Regex("!").IsMatch(content);
-
-            int linesWithCode = 0;
-            int linesCount = 0;
-
-            string[] instructionsKeywords = new string[] { "if", "for", "try", "catch", "while", "do" };
-            string instructionsRegexPart = "";
-            foreach (var keyword in instructionsKeywords)
-            {
-                instructionsRegexPart += (keyword + @"\s?\(.*\)|");
-            }
-            Regex hasCodeRegex = new Regex(instructionsRegexPart + @"^{|^}|\bvoid\b|\bvar\b|==|!=|;$|^\/\/");
-
-            using (var reader = new StringReader(content))
-            {
-                for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                {
-                    if (hasCodeRegex.IsMatch(line))
-                    {
-                        linesWithCode++;
-                    }
-                    linesCount++;
-                }
-            }
-            HasCode = (double)linesWithCode / linesCount > 0.1;
+            HasCode = CodeDetector.HasCode(content);
 
             if (MethodName != null && CommentLocation == "method_description")
             {
-                string[] methodNameWords = Regex.Replace(MethodName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ").Split(" ");
-                methodNameWords = methodNameWords.Where(word => word.Length > 2).ToArray();
-
-                content = Regex.Replace(content, "[.,]", "");
-                string[] contentWords = content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                contentWords = contentWords.Where(word => word.Length > 2).ToArray();
-                CoherenceCoefficient = RoslynPlay.CoherenceCoefficient.Compute(contentWords, methodNameWords);
+                CoherenceCoefficient = RoslynPlay.CoherenceCoefficient.Compute(content, MethodName);
             }
         }
 
