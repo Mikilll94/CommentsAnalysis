@@ -45,7 +45,7 @@ namespace RoslynPlay
             {
                 instructionsRegexPart += (keyword + @"\s?\(.*\)|");
             }
-            Regex hasCodeRegex = new Regex(@"(" + instructionsRegexPart + "[;{}]|void|==|!=)");
+            Regex hasCodeRegex = new Regex(instructionsRegexPart + @"^{|^}|\bvoid\b|\bvar\b|==|!=|;$|^\/\/");
 
             using (var reader = new StringReader(content))
             {
