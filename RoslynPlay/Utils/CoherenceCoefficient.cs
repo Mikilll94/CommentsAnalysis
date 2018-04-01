@@ -16,20 +16,15 @@ namespace RoslynPlay
             return wordsArray;
         }
 
-        public static string RemoveSpecialCharacters(string word)
-        {
-            return Regex.Replace(word, @"[:!@#$%^&*()}{|\"":?><\[\]\\;'\.,~0-9]", "");
-        }
-
         public static double Compute(string commentContent, string methodName)
         {
-            commentContent = RemoveSpecialCharacters(commentContent);
+            commentContent = General.RemoveSpecialCharacters(commentContent);
             string[] commentWords = commentContent.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             commentWords = PreprocessWords(commentWords);
 
             if (commentWords.Length == 0) return 0;
 
-            methodName = RemoveSpecialCharacters(methodName);
+            methodName = General.RemoveSpecialCharacters(methodName);
             string[] methodWords = Regex.Replace(methodName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ").Split(" ");
             methodWords = PreprocessWords(methodWords);
 

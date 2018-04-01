@@ -19,7 +19,8 @@ namespace RoslynPlay
             char[] delimiters = new char[] { ' ', '\t', '\r', '\n' };
             if (type == "single_line_comment")
             {
-                WordsCount = content.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
+                string normalizedContent = General.RemoveSpecialCharacters(content);
+                WordsCount = normalizedContent.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
             }
 
             if (commentLocationstore.CommentLocations.ContainsKey(lineEnd))

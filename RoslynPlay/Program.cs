@@ -32,7 +32,7 @@ namespace RoslynPlay
             SyntaxNode root;
             CommentSyntaxWalker commentWalker;
             MethodSyntaxWalker methodWalker;
-            string projectName = "EntityFrameworkCore";
+            string projectName = "roslyn";
             string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/{projectName}", $"*.cs", SearchOption.AllDirectories);
             int filesLength = files.Length;
             var commentStore = new CommentStore();
