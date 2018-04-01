@@ -29,7 +29,7 @@ namespace RoslynPlay
             }
 
             HasNothing = new Regex("nothing", RegexOptions.IgnoreCase).IsMatch(content);
-            HasQuestionMark = new Regex(@"\?").IsMatch(content);
+            HasQuestionMark = new Regex(@"\?($|\W)").IsMatch(content);
             HasExclamationMark = new Regex("!").IsMatch(content);
             HasCode = CodeDetector.HasCode(content);
 

@@ -32,13 +32,13 @@ namespace RoslynPlay
             SyntaxNode root;
             CommentSyntaxWalker commentWalker;
             MethodSyntaxWalker methodWalker;
-            string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/gitextensions-master", $"*.cs",
-                SearchOption.AllDirectories);
+            string projectName = "EntityFrameworkCore";
+            string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/{projectName}", $"*.cs", SearchOption.AllDirectories);
             var commentStore = new CommentStore();
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
-                string filePath = new Regex(@"gitextensions-master\\(.*)$").Match(file).Groups[1].ToString();
+                string filePath = new Regex($@"{projectName}\\(.*)$").Match(file).Groups[1].ToString();
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
                 var commentLocationStore = new CommentLocationStore();
@@ -49,7 +49,7 @@ namespace RoslynPlay
             }
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            FileInfo xlsxFile = new FileInfo(@"comments.xlsx");
+            FileInfo xlsxFile = new FileInfo(@"../comments.xlsx");
             using (ExcelPackage package = new ExcelPackage(xlsxFile))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Worksheet");
@@ -104,6 +104,7 @@ namespace RoslynPlay
                 {
                     worksheet.Column(i).AutoFit();
                 }
+
                 package.Save();
             }
             Console.WriteLine("Finished");

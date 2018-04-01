@@ -10,13 +10,21 @@ namespace RoslynPlay
             int linesWithCode = 0;
             int linesCount = 0;
 
-            string[] instructionsKeywords = new string[] { "if", "for", "try", "catch", "while", "do" };
-            string instructionsRegexPart = "";
-            foreach (var keyword in instructionsKeywords)
+            string codeKeywords = "";
+
+            string[] instructionKeywords = new string[] { "if", "for", "try", "catch", "while", "do", "typeof", "nameof" };
+            foreach (var keyword in instructionKeywords)
             {
-                instructionsRegexPart += (keyword + @"\s?\(.*\)|");
+                codeKeywords += $@"{keyword}\s?\(.*\)|";
             }
-            Regex hasCodeRegex = new Regex(instructionsRegexPart + @"^{|^}|\bvoid\b|\bvar\b|==|!=|;$|^\/\/");
+
+            string[] expressionKeywords = new string[] { "void", "var" };
+            foreach (var keyword in expressionKeywords)
+            {
+                codeKeywords += $@"\b{keyword}\b|";
+            }
+
+            Regex hasCodeRegex = new Regex(codeKeywords + @"^{|^}|==|!=|;$|^\/\/");
 
             using (var reader = new StringReader(content))
             {
