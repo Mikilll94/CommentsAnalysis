@@ -34,7 +34,12 @@ namespace RoslynPlay
             MethodSyntaxWalker methodWalker;
             string projectName = "EntityFrameworkCore";
             string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/{projectName}", $"*.cs", SearchOption.AllDirectories);
+            int filesLength = files.Length;
             var commentStore = new CommentStore();
+
+            Console.WriteLine("Reading files...");
+
+            double processedFiles = 0;
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
@@ -46,7 +51,10 @@ namespace RoslynPlay
                 methodWalker.Visit(root);
                 commentWalker = new CommentSyntaxWalker(filePath, commentLocationStore, commentStore);
                 commentWalker.Visit(root);
+                Console.Write($"\r{++processedFiles}/{filesLength}");
             }
+
+            Console.WriteLine("\nCreating excel file...");
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             FileInfo xlsxFile = new FileInfo(@"../comments.xlsx");
@@ -107,6 +115,7 @@ namespace RoslynPlay
 
                 package.Save();
             }
+
             Console.WriteLine("Finished");
             Console.ReadKey();
         }

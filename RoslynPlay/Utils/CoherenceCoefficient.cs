@@ -9,26 +9,29 @@ namespace RoslynPlay
     {
         private static EnglishStemmer stemmer = new EnglishStemmer();
 
-        public static string[] PreprocessWordsArray(string [] wordsArray)
+        public static string[] PreprocessWords(string [] wordsArray)
         {
             wordsArray = wordsArray.Where(word => word.Length > 2).ToArray();
             wordsArray = wordsArray.Select(word => stemmer.Stem(word)).ToArray();
             return wordsArray;
         }
 
+        public static string RemoveSpecialCharacters(string word)
+        {
+            return Regex.Replace(word, @"[:!@#$%^&*()}{|\"":?><\[\]\\;'\.,~0-9]", "");
+        }
+
         public static double Compute(string commentContent, string methodName)
         {
-            string[] methodWords = Regex.Replace(methodName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ").Split(" ");
-            methodWords = PreprocessWordsArray(methodWords);
-
-            commentContent = Regex.Replace(commentContent, "[.,]", "");
+            commentContent = RemoveSpecialCharacters(commentContent);
             string[] commentWords = commentContent.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            commentWords = PreprocessWordsArray(commentWords);
+            commentWords = PreprocessWords(commentWords);
 
-            if (commentWords.Length == 0)
-            {
-                return 0;
-            }
+            if (commentWords.Length == 0) return 0;
+
+            methodName = RemoveSpecialCharacters(methodName);
+            string[] methodWords = Regex.Replace(methodName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ").Split(" ");
+            methodWords = PreprocessWords(methodWords);
 
             int matchedWords = 0;
             foreach (var commentWord in commentWords)
