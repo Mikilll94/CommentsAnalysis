@@ -18,13 +18,13 @@ namespace RoslynPlay
 
         public static double Compute(string commentContent, string methodName)
         {
-            commentContent = General.RemoveSpecialCharacters(commentContent);
+            commentContent = WordTransform.RemoveSpecialCharacters(commentContent);
             string[] commentWords = commentContent.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             commentWords = PreprocessWords(commentWords);
 
             if (commentWords.Length == 0) return 0;
 
-            methodName = General.RemoveSpecialCharacters(methodName);
+            methodName = WordTransform.RemoveSpecialCharacters(methodName);
             string[] methodWords = Regex.Replace(methodName, "([a-z](?=[A-Z])|[A-Z](?=[A-Z][a-z]))", "$1 ").Split(" ");
             methodWords = PreprocessWords(methodWords);
 

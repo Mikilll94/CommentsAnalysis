@@ -2,7 +2,7 @@
 
 namespace RoslynPlay
 {
-    class General
+    class WordTransform
     {
         public static string RemoveSpecialCharacters(string word)
         {
