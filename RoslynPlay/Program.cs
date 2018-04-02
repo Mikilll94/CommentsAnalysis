@@ -15,7 +15,7 @@ namespace RoslynPlay
             SyntaxNode root;
             CommentSyntaxWalker commentWalker;
             MethodSyntaxWalker methodWalker;
-            string projectName = "roslyn";
+            string projectName = "gitextensions";
             string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/{projectName}", $"*.cs", SearchOption.AllDirectories);
             var commentStore = new CommentStore();
 

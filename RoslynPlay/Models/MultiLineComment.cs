@@ -10,7 +10,8 @@ namespace RoslynPlay
             Type = "multi_line_comment";
             LineStart = lineStart;
             LineEnd = lineEnd;
-            Statistics = new Statistics(Content, lineEnd, Type, commentLocationstore);
+            Metrics = new Metrics(Content, lineEnd, Type, commentLocationstore);
+            Evaluation = new EvaluationBad(Metrics);
         }
 
         public override string GetLinesRange()

@@ -7,7 +7,8 @@
         public int LineStart { get; set; }
         public int LineEnd { get; set; }
         public string Type { get; set; }
-        public Statistics Statistics { get; set; }
+        public Metrics Metrics { get; set; }
+        public EvaluationBad Evaluation { get; set; }
 
         public Comment()
         {

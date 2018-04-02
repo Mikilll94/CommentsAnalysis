@@ -8,7 +8,8 @@
             Type = "single_line_comment";
             LineStart = line;
             LineEnd = line;
-            Statistics = new Statistics(Content, line, Type, commentLocationstore);
+            Metrics = new Metrics(Content, line, Type, commentLocationstore);
+            Evaluation = new EvaluationBad(Metrics);
         }
 
         public override string GetLinesRange()

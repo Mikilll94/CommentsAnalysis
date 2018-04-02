@@ -29,6 +29,7 @@ namespace RoslynPlay
             using (ExcelPackage package = new ExcelPackage(_file))
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Worksheet");
+                worksheet.View.FreezePanes(2, 1);
                 worksheet.Cells[1, 1].Value = "File";
                 worksheet.Cells[1, 2].Value = "Line";
                 worksheet.Cells[1, 3].Value = "Type";
@@ -40,7 +41,8 @@ namespace RoslynPlay
                 worksheet.Cells[1, 9].Value = "Coherence coefficient";
                 worksheet.Cells[1, 10].Value = "Location";
                 worksheet.Cells[1, 11].Value = "Method name";
-                worksheet.Cells[1, 12].Value = "Comment";
+                worksheet.Cells[1, 12].Value = "Is bad?";
+                worksheet.Cells[1, 13].Value = "Comment";
 
                 int rowNumber = 2;
 
@@ -52,26 +54,29 @@ namespace RoslynPlay
                     ExcelRange hasQuestionMarkCell = worksheet.Cells[rowNumber, 7];
                     ExcelRange hasCodeCell = worksheet.Cells[rowNumber, 8];
                     ExcelRange coherenceCoefficientCell = worksheet.Cells[rowNumber, 9];
+                    ExcelRange isBadCell = worksheet.Cells[rowNumber, 12];
 
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value = comment.GetLinesRange();
                     worksheet.Cells[rowNumber, 3].Value = comment.Type;
-                    wordsCountCell.Value = comment.Statistics.WordsCount;
-                    hasNothingCell.Value = comment.Statistics.HasNothing;
-                    hasExclamationMarkCell.Value = comment.Statistics.HasExclamationMark;
-                    hasQuestionMarkCell.Value = comment.Statistics.HasQuestionMark;
-                    hasCodeCell.Value = comment.Statistics.HasCode;
-                    coherenceCoefficientCell.Value = comment.Statistics.CoherenceCoefficient;
-                    worksheet.Cells[rowNumber, 10].Value = comment.Statistics.CommentLocation;
-                    worksheet.Cells[rowNumber, 11].Value = comment.Statistics.MethodName;
-                    worksheet.Cells[rowNumber, 12].Value = comment.Content;
+                    wordsCountCell.Value = comment.Metrics.WordsCount;
+                    hasNothingCell.Value = comment.Metrics.HasNothing;
+                    hasExclamationMarkCell.Value = comment.Metrics.HasExclamationMark;
+                    hasQuestionMarkCell.Value = comment.Metrics.HasQuestionMark;
+                    hasCodeCell.Value = comment.Metrics.HasCode;
+                    coherenceCoefficientCell.Value = comment.Metrics.CoherenceCoefficient;
+                    worksheet.Cells[rowNumber, 10].Value = comment.Metrics.CommentLocation;
+                    worksheet.Cells[rowNumber, 11].Value = comment.Metrics.MethodName;
+                    isBadCell.Value = comment.Evaluation.IsBad();
+                    worksheet.Cells[rowNumber, 13].Value = comment.Content;
 
-                    FormatCell(wordsCountCell, comment.Statistics.WordsCountBad());
-                    FormatCell(hasNothingCell, comment.Statistics.HasNothing);
-                    FormatCell(hasExclamationMarkCell, comment.Statistics.HasExclamationMark);
-                    FormatCell(hasQuestionMarkCell, comment.Statistics.HasQuestionMark);
-                    FormatCell(hasCodeCell, comment.Statistics.HasCode);
-                    FormatCell(coherenceCoefficientCell, comment.Statistics.CoherenceCoefficientBad());
+                    FormatCell(wordsCountCell, comment.Evaluation.WordsCount());
+                    FormatCell(hasNothingCell, comment.Metrics.HasNothing);
+                    FormatCell(hasExclamationMarkCell, comment.Metrics.HasExclamationMark);
+                    FormatCell(hasQuestionMarkCell, comment.Metrics.HasQuestionMark);
+                    FormatCell(hasCodeCell, comment.Metrics.HasCode);
+                    FormatCell(coherenceCoefficientCell, comment.Evaluation.CoherenceCoefficient());
+                    FormatCell(isBadCell, comment.Evaluation.IsBad());
 
                     rowNumber++;
                 }

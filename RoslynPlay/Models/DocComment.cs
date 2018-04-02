@@ -11,7 +11,8 @@ namespace RoslynPlay
             Type = "doc_comment";
             LineStart = lineStart;
             LineEnd = lineEnd;
-            Statistics = new Statistics(Content, lineEnd, Type, commentLocationstore);
+            Metrics = new Metrics(Content, lineEnd, Type, commentLocationstore);
+            Evaluation = new EvaluationBad(Metrics);
         }
 
         public override string GetLinesRange()
