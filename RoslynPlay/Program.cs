@@ -14,7 +14,7 @@ namespace RoslynPlay
             SyntaxTree tree;
             SyntaxNode root;
             CommentSyntaxWalker commentWalker;
-            MethodSyntaxWalker methodWalker;
+            MethodAndClassesSyntaxWalker methodWalker;
             string projectName = "gitextensions";
             string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/{projectName}", $"*.cs", SearchOption.AllDirectories);
             var commentStore = new CommentStore();
@@ -28,10 +28,10 @@ namespace RoslynPlay
                 string filePath = new Regex($@"{projectName}\\(.*)$").Match(file).Groups[1].ToString();
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
-                var commentLocationStore = new CommentLocationStore();
-                methodWalker = new MethodSyntaxWalker(filePath, commentLocationStore);
+                var locationStore = new LocationStore();
+                methodWalker = new MethodAndClassesSyntaxWalker(filePath, locationStore);
                 methodWalker.Visit(root);
-                commentWalker = new CommentSyntaxWalker(filePath, commentLocationStore, commentStore);
+                commentWalker = new CommentSyntaxWalker(filePath, locationStore, commentStore);
                 commentWalker.Visit(root);
 
                 progressBar.UpdateAndDisplay();

@@ -5,8 +5,10 @@ namespace RoslynPlay
 {
     public class Metrics
     {
-        public string CommentLocation { get; }
+        public string LocationMethod { get; }
+        public string LocationClass { get; }
         public string MethodName { get; }
+        public string ClassName { get; }
         public int? WordsCount { get; }
         public bool? HasNothing { get; }
         public bool? HasQuestionMark { get; }
@@ -14,7 +16,7 @@ namespace RoslynPlay
         public bool? HasCode { get; }
         public double? CoherenceCoefficient { get; }
 
-        public Metrics(string content, int lineEnd, string type, CommentLocationStore commentLocationstore)
+        public Metrics(string content, int lineEnd, string type, LocationStore locationstore)
         {
             char[] delimiters = new char[] { ' ', '\t', '\r', '\n' };
             if (type == "single_line_comment")
@@ -23,10 +25,15 @@ namespace RoslynPlay
                 WordsCount = normalizedContent.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
             }
 
-            if (commentLocationstore.CommentLocations.ContainsKey(lineEnd))
+            if (locationstore.MethodLocations.ContainsKey(lineEnd))
             {
-                CommentLocation = commentLocationstore.CommentLocations[lineEnd][0];
-                MethodName = commentLocationstore.CommentLocations[lineEnd][1];
+                LocationMethod = locationstore.MethodLocations[lineEnd][0];
+                MethodName = locationstore.MethodLocations[lineEnd][1];
+            }
+            if (locationstore.ClassLocations.ContainsKey(lineEnd))
+            {
+                LocationClass = locationstore.ClassLocations[lineEnd][0];
+                ClassName = locationstore.ClassLocations[lineEnd][1];
             }
 
             HasNothing = new Regex("nothing", RegexOptions.IgnoreCase).IsMatch(content);
@@ -34,7 +41,7 @@ namespace RoslynPlay
             HasExclamationMark = new Regex("!").IsMatch(content);
             HasCode = CodeDetector.HasCode(content);
 
-            if (MethodName != null && CommentLocation == "method_description")
+            if (MethodName != null && LocationMethod == "method_description")
             {
                 CoherenceCoefficient = RoslynPlay.CoherenceCoefficient.Compute(content, MethodName);
             }

@@ -7,10 +7,10 @@ namespace RoslynPlay
     public class CommentSyntaxWalker : CSharpSyntaxWalker
     {
         private string _fileName;
-        private CommentLocationStore _commentLocationStore;
+        private LocationStore _commentLocationStore;
         private CommentStore _commentStore;
 
-        public CommentSyntaxWalker(string fileName, CommentLocationStore commentLocationStore,
+        public CommentSyntaxWalker(string fileName, LocationStore commentLocationStore,
             CommentStore commentStore)
             : base(SyntaxWalkerDepth.StructuredTrivia)
         {

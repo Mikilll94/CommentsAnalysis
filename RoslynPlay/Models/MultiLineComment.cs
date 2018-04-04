@@ -4,7 +4,7 @@ namespace RoslynPlay
 {
     class MultiLineComment : Comment
     {
-        public MultiLineComment(string content, int lineStart, int lineEnd, CommentLocationStore commentLocationstore)
+        public MultiLineComment(string content, int lineStart, int lineEnd, LocationStore commentLocationstore)
         {
             Content = new Regex(@"\/\*(.*)\*\/", RegexOptions.Singleline).Match(content).Groups[1].ToString();
             Type = "multi_line_comment";

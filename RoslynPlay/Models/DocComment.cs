@@ -4,7 +4,7 @@ namespace RoslynPlay
 {
     class DocComment : Comment
     {
-        public DocComment(string content, int lineStart, int lineEnd, CommentLocationStore commentLocationstore)
+        public DocComment(string content, int lineStart, int lineEnd, LocationStore commentLocationstore)
         {
             Content = Regex.Replace(content, @"(\/\/\/)", "");
             Content = Regex.Replace(Content, "(<.*?>)", "");

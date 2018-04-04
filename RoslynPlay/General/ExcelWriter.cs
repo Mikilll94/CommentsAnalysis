@@ -39,10 +39,12 @@ namespace RoslynPlay
                 worksheet.Cells[1, 7].Value = "Has ?";
                 worksheet.Cells[1, 8].Value = "Has code";
                 worksheet.Cells[1, 9].Value = "Coherence coefficient";
-                worksheet.Cells[1, 10].Value = "Location";
+                worksheet.Cells[1, 10].Value = "Location method";
                 worksheet.Cells[1, 11].Value = "Method name";
-                worksheet.Cells[1, 12].Value = "Is bad?";
-                worksheet.Cells[1, 13].Value = "Comment";
+                worksheet.Cells[1, 12].Value = "Location class";
+                worksheet.Cells[1, 13].Value = "Class name";
+                worksheet.Cells[1, 14].Value = "Is bad?";
+                worksheet.Cells[1, 15].Value = "Comment";
 
                 int rowNumber = 2;
 
@@ -54,7 +56,7 @@ namespace RoslynPlay
                     ExcelRange hasQuestionMarkCell = worksheet.Cells[rowNumber, 7];
                     ExcelRange hasCodeCell = worksheet.Cells[rowNumber, 8];
                     ExcelRange coherenceCoefficientCell = worksheet.Cells[rowNumber, 9];
-                    ExcelRange isBadCell = worksheet.Cells[rowNumber, 12];
+                    ExcelRange isBadCell = worksheet.Cells[rowNumber, 14];
 
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value = comment.GetLinesRange();
@@ -65,10 +67,12 @@ namespace RoslynPlay
                     hasQuestionMarkCell.Value = comment.Metrics.HasQuestionMark;
                     hasCodeCell.Value = comment.Metrics.HasCode;
                     coherenceCoefficientCell.Value = comment.Metrics.CoherenceCoefficient;
-                    worksheet.Cells[rowNumber, 10].Value = comment.Metrics.CommentLocation;
+                    worksheet.Cells[rowNumber, 10].Value = comment.Metrics.LocationMethod;
                     worksheet.Cells[rowNumber, 11].Value = comment.Metrics.MethodName;
+                    worksheet.Cells[rowNumber, 12].Value = comment.Metrics.LocationClass;
+                    worksheet.Cells[rowNumber, 13].Value = comment.Metrics.ClassName;
                     isBadCell.Value = comment.Evaluation.IsBad();
-                    worksheet.Cells[rowNumber, 13].Value = comment.Content;
+                    worksheet.Cells[rowNumber, 15].Value = comment.Content;
 
                     FormatCell(wordsCountCell, comment.Evaluation.WordsCount());
                     FormatCell(hasNothingCell, comment.Metrics.HasNothing);
@@ -81,7 +85,7 @@ namespace RoslynPlay
                     rowNumber++;
                 }
 
-                for (int i = 2; i <= 10; i++)
+                for (int i = 2; i <= 14; i++)
                 {
                     worksheet.Column(i).AutoFit();
                 }

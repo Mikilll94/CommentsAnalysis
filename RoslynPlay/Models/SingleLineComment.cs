@@ -2,7 +2,7 @@
 {
     class SingleLineComment : Comment
     {
-        public SingleLineComment(string content, int line, CommentLocationStore commentLocationstore)
+        public SingleLineComment(string content, int line, LocationStore commentLocationstore)
         {
             Content = content.Substring(content.IndexOf("//") + 2);
             Type = "single_line_comment";

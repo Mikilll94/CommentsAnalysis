@@ -10,7 +10,7 @@ namespace RoslynPlay
         public List<Comment> Comments { get; } = new List<Comment>();
 
         public void AddCommentTrivia(SyntaxTrivia trivia,
-            CommentLocationStore commentLocationstore, string fileName)
+            LocationStore commentLocationstore, string fileName)
         {
             if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
             {
@@ -32,7 +32,7 @@ namespace RoslynPlay
         }
 
         public void AddCommentNode(DocumentationCommentTriviaSyntax node,
-            CommentLocationStore commentLocationstore, string fileName)
+            LocationStore commentLocationstore, string fileName)
         {
             Comments.Add(new DocComment(node.ToString(),
                 node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
