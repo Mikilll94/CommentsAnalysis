@@ -28,7 +28,7 @@ namespace RoslynPlay
         {
             using (ExcelPackage package = new ExcelPackage(_file))
             {
-                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Worksheet");
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("Comments");
                 worksheet.View.FreezePanes(2, 1);
                 worksheet.Cells[1, 1].Value = "File";
                 worksheet.Cells[1, 2].Value = "Line";
@@ -89,7 +89,6 @@ namespace RoslynPlay
                 {
                     worksheet.Column(i).AutoFit();
                 }
-
                 package.Save();
             }
         }
