@@ -11,29 +11,9 @@
 
         public bool IsBad()
         {
-            return HasNothing() == true || HasQuestionMark() == true ||
-                HasExclamationMark() == true || HasCode() == true ||
+            return _metrics.HasNothing == true || _metrics.HasQuestionMark == true ||
+                _metrics.HasExclamationMark == true || _metrics.HasCode == true ||
                 CoherenceCoefficient() == true || WordsCount() == true;
-        }
-
-        public bool? HasNothing()
-        {
-            return _metrics.HasNothing;
-        }
-
-        public bool? HasQuestionMark()
-        {
-            return _metrics.HasQuestionMark;
-        }
-
-        public bool? HasExclamationMark()
-        {
-            return _metrics.HasExclamationMark;
-        }
-
-        public bool? HasCode()
-        {
-            return _metrics.HasCode;
         }
 
         public bool? CoherenceCoefficient()
@@ -48,11 +28,6 @@
             if (_metrics.WordsCount == null || _metrics.WordsCount == 0) return null;
 
             return _metrics.WordsCount <= 2 || _metrics.WordsCount > 30;
-        }
-
-        public bool? IsClassSmelly()
-        {
-            return _metrics.IsClassSmelly;
         }
     }
 }

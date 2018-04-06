@@ -51,40 +51,22 @@ namespace RoslynPlay
 
                 foreach (var comment in commentStore.Comments)
                 {
-                    ExcelRange wordsCountCell = worksheet.Cells[rowNumber, 4];
-                    ExcelRange hasNothingCell = worksheet.Cells[rowNumber, 5];
-                    ExcelRange hasExclamationMarkCell = worksheet.Cells[rowNumber, 6];
-                    ExcelRange hasQuestionMarkCell = worksheet.Cells[rowNumber, 7];
-                    ExcelRange hasCodeCell = worksheet.Cells[rowNumber, 8];
-                    ExcelRange coherenceCoefficientCell = worksheet.Cells[rowNumber, 9];
-                    ExcelRange isBadCell = worksheet.Cells[rowNumber, 15];
-                    ExcelRange isClassSmelly = worksheet.Cells[rowNumber, 14];
-
-                    worksheet.Cells[rowNumber, 1].Value = comment.FileName;
-                    worksheet.Cells[rowNumber, 2].Value = comment.GetLinesRange();
-                    worksheet.Cells[rowNumber, 3].Value = comment.Type;
-                    wordsCountCell.Value = comment.Metrics.WordsCount;
-                    hasNothingCell.Value = comment.Metrics.HasNothing;
-                    hasExclamationMarkCell.Value = comment.Metrics.HasExclamationMark;
-                    hasQuestionMarkCell.Value = comment.Metrics.HasQuestionMark;
-                    hasCodeCell.Value = comment.Metrics.HasCode;
-                    coherenceCoefficientCell.Value = comment.Metrics.CoherenceCoefficient;
-                    worksheet.Cells[rowNumber, 10].Value = comment.Metrics.LocationMethod;
-                    worksheet.Cells[rowNumber, 11].Value = comment.Metrics.MethodName;
-                    worksheet.Cells[rowNumber, 12].Value = comment.Metrics.LocationClass;
-                    worksheet.Cells[rowNumber, 13].Value = comment.Metrics.ClassName;
-                    isClassSmelly.Value = comment.Metrics.IsClassSmelly;
-                    isBadCell.Value = comment.Evaluation.IsBad();
-                    worksheet.Cells[rowNumber, 16].Value = comment.Content;
-
-                    FormatCell(wordsCountCell, comment.Evaluation.WordsCount());
-                    FormatCell(hasNothingCell, comment.Metrics.HasNothing);
-                    FormatCell(hasExclamationMarkCell, comment.Metrics.HasExclamationMark);
-                    FormatCell(hasQuestionMarkCell, comment.Metrics.HasQuestionMark);
-                    FormatCell(hasCodeCell, comment.Metrics.HasCode);
-                    FormatCell(coherenceCoefficientCell, comment.Evaluation.CoherenceCoefficient());
-                    FormatCell(isBadCell, comment.Evaluation.IsBad());
-                    FormatCell(isClassSmelly, comment.Evaluation.IsClassSmelly());
+                    ExcelUtils.WriteCell(rowNumber, 1, comment.FileName, worksheet);
+                    ExcelUtils.WriteCell(rowNumber, 2, comment.GetLinesRange(), worksheet);
+                    ExcelUtils.WriteCell(rowNumber, 3, comment.Type, worksheet);
+                    ExcelUtils.WriteCell(rowNumber, 4, comment.Metrics.WordsCount, worksheet, comment.Evaluation.WordsCount());
+                    ExcelUtils.WriteCell(rowNumber, 5, comment.Metrics.HasNothing, worksheet, comment.Metrics.HasNothing);
+                    ExcelUtils.WriteCell(rowNumber, 6, comment.Metrics.HasExclamationMark, worksheet, comment.Metrics.HasExclamationMark);
+                    ExcelUtils.WriteCell(rowNumber, 7, comment.Metrics.HasQuestionMark, worksheet, comment.Metrics.HasQuestionMark);
+                    ExcelUtils.WriteCell(rowNumber, 8, comment.Metrics.HasCode, worksheet, comment.Metrics.HasCode);
+                    ExcelUtils.WriteCell(rowNumber, 9, comment.Metrics.CoherenceCoefficient, worksheet, comment.Evaluation.CoherenceCoefficient());
+                    ExcelUtils.WriteCell(rowNumber, 10, comment.Metrics.LocationMethod, worksheet);
+                    ExcelUtils.WriteCell(rowNumber, 11, comment.Metrics.MethodName, worksheet);
+                    ExcelUtils.WriteCell(rowNumber, 12, comment.Metrics.LocationClass, worksheet);
+                    ExcelUtils.WriteCell(rowNumber, 13, comment.Metrics.ClassName, worksheet);
+                    ExcelUtils.WriteCell(rowNumber, 14, comment.Metrics.IsClassSmelly, worksheet, comment.Metrics.IsClassSmelly);
+                    ExcelUtils.WriteCell(rowNumber, 15, comment.Evaluation.IsBad(), worksheet, comment.Evaluation.IsBad());
+                    ExcelUtils.WriteCell(rowNumber, 16, comment.Content, worksheet);
 
                     rowNumber++;
                 }
