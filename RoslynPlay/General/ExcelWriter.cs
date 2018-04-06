@@ -2,6 +2,7 @@
 using OfficeOpenXml.Style;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace RoslynPlay
@@ -69,6 +70,13 @@ namespace RoslynPlay
                 {
                     worksheet.Column(i).AutoFit();
                 }
+
+                ExcelWorksheet summaryWorksheet = package.Workbook.Worksheets.Add("Summary");
+
+                summaryWorksheet.Cells[1, 1].Value = "Percent of comments in smelly classes";
+                summaryWorksheet.Cells[2, 1].Value =
+                    $"{100.0 * commentStore.Comments.Count(c => c.Metrics.IsClassSmelly == true) / commentStore.Comments.Count}%";
+
                 package.Save();
             }
         }
