@@ -4,11 +4,20 @@ using System.Drawing;
 
 namespace RoslynPlay
 {
-    public static class ExcelUtils
+    public class ExcelRowWriter
     {
-        public static void WriteCell(int row, int column, object value, ExcelWorksheet worksheet, bool? formatCondition = null)
+        private ExcelWorksheet _worksheet;
+        private int _rowNo;
+
+        public ExcelRowWriter(ExcelWorksheet worksheet, int rowNo)
         {
-            ExcelRange _excelRange = worksheet.Cells[row, column];
+            _worksheet = worksheet;
+            _rowNo = rowNo;
+        }
+
+        public void WriteCell(int column, object value, bool? formatCondition = null)
+        {
+            ExcelRange _excelRange = _worksheet.Cells[_rowNo, column];
             _excelRange.Value = value;
             if (formatCondition != null)
             {

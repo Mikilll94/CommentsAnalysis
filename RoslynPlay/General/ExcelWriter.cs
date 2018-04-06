@@ -16,14 +16,6 @@ namespace RoslynPlay
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
-        private void FormatCell(ExcelRange cells, bool? condition)
-        {
-            if (condition == null) return;
-
-            cells.Style.Fill.PatternType = ExcelFillStyle.Solid;
-            cells.Style.Fill.BackgroundColor.SetColor((bool)condition ? Color.IndianRed : Color.LightGreen);
-        }
-
         public void Write(CommentStore commentStore)
         {
             using (ExcelPackage package = new ExcelPackage(_file))
@@ -51,22 +43,24 @@ namespace RoslynPlay
 
                 foreach (var comment in commentStore.Comments)
                 {
-                    ExcelUtils.WriteCell(rowNumber, 1, comment.FileName, worksheet);
-                    ExcelUtils.WriteCell(rowNumber, 2, comment.GetLinesRange(), worksheet);
-                    ExcelUtils.WriteCell(rowNumber, 3, comment.Type, worksheet);
-                    ExcelUtils.WriteCell(rowNumber, 4, comment.Metrics.WordsCount, worksheet, comment.Evaluation.WordsCount());
-                    ExcelUtils.WriteCell(rowNumber, 5, comment.Metrics.HasNothing, worksheet, comment.Metrics.HasNothing);
-                    ExcelUtils.WriteCell(rowNumber, 6, comment.Metrics.HasExclamationMark, worksheet, comment.Metrics.HasExclamationMark);
-                    ExcelUtils.WriteCell(rowNumber, 7, comment.Metrics.HasQuestionMark, worksheet, comment.Metrics.HasQuestionMark);
-                    ExcelUtils.WriteCell(rowNumber, 8, comment.Metrics.HasCode, worksheet, comment.Metrics.HasCode);
-                    ExcelUtils.WriteCell(rowNumber, 9, comment.Metrics.CoherenceCoefficient, worksheet, comment.Evaluation.CoherenceCoefficient());
-                    ExcelUtils.WriteCell(rowNumber, 10, comment.Metrics.LocationMethod, worksheet);
-                    ExcelUtils.WriteCell(rowNumber, 11, comment.Metrics.MethodName, worksheet);
-                    ExcelUtils.WriteCell(rowNumber, 12, comment.Metrics.LocationClass, worksheet);
-                    ExcelUtils.WriteCell(rowNumber, 13, comment.Metrics.ClassName, worksheet);
-                    ExcelUtils.WriteCell(rowNumber, 14, comment.Metrics.IsClassSmelly, worksheet, comment.Metrics.IsClassSmelly);
-                    ExcelUtils.WriteCell(rowNumber, 15, comment.Evaluation.IsBad(), worksheet, comment.Evaluation.IsBad());
-                    ExcelUtils.WriteCell(rowNumber, 16, comment.Content, worksheet);
+                    ExcelRowWriter excelRowWriter = new ExcelRowWriter(worksheet, rowNumber);
+
+                    excelRowWriter.WriteCell(1, comment.FileName);
+                    excelRowWriter.WriteCell(2, comment.GetLinesRange());
+                    excelRowWriter.WriteCell(3, comment.Type);
+                    excelRowWriter.WriteCell(4, comment.Metrics.WordsCount, comment.Evaluation.WordsCount());
+                    excelRowWriter.WriteCell(5, comment.Metrics.HasNothing, comment.Metrics.HasNothing);
+                    excelRowWriter.WriteCell(6, comment.Metrics.HasExclamationMark, comment.Metrics.HasExclamationMark);
+                    excelRowWriter.WriteCell(7, comment.Metrics.HasQuestionMark, comment.Metrics.HasQuestionMark);
+                    excelRowWriter.WriteCell(8, comment.Metrics.HasCode, comment.Metrics.HasCode);
+                    excelRowWriter.WriteCell(9, comment.Metrics.CoherenceCoefficient, comment.Evaluation.CoherenceCoefficient());
+                    excelRowWriter.WriteCell(10, comment.Metrics.LocationMethod);
+                    excelRowWriter.WriteCell(11, comment.Metrics.MethodName);
+                    excelRowWriter.WriteCell(12, comment.Metrics.LocationClass);
+                    excelRowWriter.WriteCell(13, comment.Metrics.ClassName);
+                    excelRowWriter.WriteCell(14, comment.Metrics.IsClassSmelly, comment.Metrics.IsClassSmelly);
+                    excelRowWriter.WriteCell(15, comment.Evaluation.IsBad(), comment.Evaluation.IsBad());
+                    excelRowWriter.WriteCell(16, comment.Content);
 
                     rowNumber++;
                 }
