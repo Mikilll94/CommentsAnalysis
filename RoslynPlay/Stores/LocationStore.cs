@@ -5,18 +5,30 @@ namespace RoslynPlay
     public class LocationStore
     {
         public Dictionary<int, string[]> MethodLocations { get; } = new Dictionary<int, string[]>();
-        public Dictionary<int, string[]> ClassLocations { get; } = new Dictionary<int, string[]>();
+        public Dictionary<int, Class> ClassLocations { get; } = new Dictionary<int, Class>();
 
         public void AddClassLocation(int line, string location, string className)
         {
-            ClassLocations.TryAdd(line, new string[] { location, className });
+            ClassLocations.TryAdd(line, 
+                new Class
+                {
+                    Location = location,
+                    Name = className,
+                    IsSmelly = SmellyClasses.Classes.Contains(className),
+                });
         }
 
         public void AddClassLocation(int startLine, int endLine, string location, string className)
         {
             for (int i = startLine; i <= endLine; i++)
             {
-                ClassLocations.TryAdd(i, new string[] { location, className });
+                ClassLocations.TryAdd(i,
+                    new Class
+                    {
+                        Location = location,
+                        Name = className,
+                        IsSmelly = SmellyClasses.Classes.Contains(className),
+                    });
             }
         }
 

@@ -43,8 +43,9 @@ namespace RoslynPlay
                 worksheet.Cells[1, 11].Value = "Method name";
                 worksheet.Cells[1, 12].Value = "Location class";
                 worksheet.Cells[1, 13].Value = "Class name";
-                worksheet.Cells[1, 14].Value = "Is bad?";
-                worksheet.Cells[1, 15].Value = "Comment";
+                worksheet.Cells[1, 14].Value = "Is class smelly?";
+                worksheet.Cells[1, 15].Value = "Is bad?";
+                worksheet.Cells[1, 16].Value = "Comment";
 
                 int rowNumber = 2;
 
@@ -56,7 +57,8 @@ namespace RoslynPlay
                     ExcelRange hasQuestionMarkCell = worksheet.Cells[rowNumber, 7];
                     ExcelRange hasCodeCell = worksheet.Cells[rowNumber, 8];
                     ExcelRange coherenceCoefficientCell = worksheet.Cells[rowNumber, 9];
-                    ExcelRange isBadCell = worksheet.Cells[rowNumber, 14];
+                    ExcelRange isBadCell = worksheet.Cells[rowNumber, 15];
+                    ExcelRange isClassSmelly = worksheet.Cells[rowNumber, 14];
 
                     worksheet.Cells[rowNumber, 1].Value = comment.FileName;
                     worksheet.Cells[rowNumber, 2].Value = comment.GetLinesRange();
@@ -71,8 +73,9 @@ namespace RoslynPlay
                     worksheet.Cells[rowNumber, 11].Value = comment.Metrics.MethodName;
                     worksheet.Cells[rowNumber, 12].Value = comment.Metrics.LocationClass;
                     worksheet.Cells[rowNumber, 13].Value = comment.Metrics.ClassName;
+                    isClassSmelly.Value = comment.Metrics.IsClassSmelly;
                     isBadCell.Value = comment.Evaluation.IsBad();
-                    worksheet.Cells[rowNumber, 15].Value = comment.Content;
+                    worksheet.Cells[rowNumber, 16].Value = comment.Content;
 
                     FormatCell(wordsCountCell, comment.Evaluation.WordsCount());
                     FormatCell(hasNothingCell, comment.Metrics.HasNothing);
@@ -81,6 +84,7 @@ namespace RoslynPlay
                     FormatCell(hasCodeCell, comment.Metrics.HasCode);
                     FormatCell(coherenceCoefficientCell, comment.Evaluation.CoherenceCoefficient());
                     FormatCell(isBadCell, comment.Evaluation.IsBad());
+                    FormatCell(isClassSmelly, comment.Evaluation.IsClassSmelly());
 
                     rowNumber++;
                 }

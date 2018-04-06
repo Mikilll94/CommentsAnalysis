@@ -9,6 +9,7 @@ namespace RoslynPlay
         public string LocationClass { get; }
         public string MethodName { get; }
         public string ClassName { get; }
+        public bool? IsClassSmelly { get; }
         public int? WordsCount { get; }
         public bool? HasNothing { get; }
         public bool? HasQuestionMark { get; }
@@ -29,11 +30,13 @@ namespace RoslynPlay
             {
                 LocationMethod = locationstore.MethodLocations[lineEnd][0];
                 MethodName = locationstore.MethodLocations[lineEnd][1];
+
             }
             if (locationstore.ClassLocations.ContainsKey(lineEnd))
             {
-                LocationClass = locationstore.ClassLocations[lineEnd][0];
-                ClassName = locationstore.ClassLocations[lineEnd][1];
+                LocationClass = locationstore.ClassLocations[lineEnd].Location;
+                ClassName = locationstore.ClassLocations[lineEnd].Name;
+                IsClassSmelly = locationstore.ClassLocations[lineEnd].IsSmelly;
             }
 
             HasNothing = new Regex("nothing", RegexOptions.IgnoreCase).IsMatch(content);

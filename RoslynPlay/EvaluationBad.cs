@@ -49,5 +49,10 @@
 
             return _metrics.WordsCount <= 2 || _metrics.WordsCount > 30;
         }
+
+        public bool? IsClassSmelly()
+        {
+            return _metrics.IsClassSmelly;
+        }
     }
 }
