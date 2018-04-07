@@ -1,53 +1,47 @@
 ﻿using ExcelDataReader;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace RoslynPlay
 {
     class SmellyClasses
     {
-        public static List<string> All { get; set; } = new List<string>();
-        public static List<string> Abstraction { get; set; } = new List<string>();
-        public static List<string> Encapsulation { get; set; } = new List<string>();
-        public static List<string> Modularization { get; set; } = new List<string>();
-        public static List<string> Hierarchy { get; set; } = new List<string>();
+        public static HashSet<string> All { get; set; } = new HashSet<string>();
+        public static HashSet<string> Abstraction { get; set; } = new HashSet<string>();
+        public static HashSet<string> Encapsulation { get; set; } = new HashSet<string>();
+        public static HashSet<string> Modularization { get; set; } = new HashSet<string>();
+        public static HashSet<string> Hierarchy { get; set; } = new HashSet<string>();
 
-        public SmellyClasses(string projectName)
+        public SmellyClasses(string projectName, string sheetPrefix)
         {
-            using (var stream = File.Open("c:/Users/wasni/Desktop/Designite_GitExtensions.xls", FileMode.Open, FileAccess.Read))
+            using (var stream = File.Open(projectName, FileMode.Open, FileAccess.Read))
             {
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
                     var result = reader.AsDataSet();
 
-                    for (int i = 0; i < result.Tables[$"{projectName}_AbsSMells"].Rows.Count; i++)
+                    Dictionary<string, HashSet<string>> sheets = new Dictionary<string, HashSet<string>>()
                     {
-                        All.Add(result.Tables[$"{projectName}_AbsSMells"].Rows[i][2].ToString());
-                        Abstraction.Add(result.Tables[$"{projectName}_AbsSMells"].Rows[i][2].ToString());
-                    }
-                    for (int i = 0; i < result.Tables[$"{projectName}_EncSMells"].Rows.Count; i++)
+                        { "AbsSMells", Abstraction },
+                        { "EncSMells", Encapsulation },
+                        { "ModSMells", Modularization },
+                        { "HieSMells", Hierarchy }
+                    };
+
+                    foreach (var sheet in sheets.Keys)
                     {
-                        All.Add(result.Tables[$"{projectName}_EncSMells"].Rows[i][2].ToString());
-                        Encapsulation.Add(result.Tables[$"{projectName}_EncSMells"].Rows[i][2].ToString());
+                        string sheetName = $"{sheetPrefix}_{sheet}";
+                        DataRowCollection rows = result.Tables[sheetName].Rows;
+                        for (int i = 0; i < rows.Count; i++)
+                        {
+                            string className = rows[i][2].ToString();
+                            All.Add(className);
+                            sheets[sheet].Add(className);
+                        }
                     }
-                    for (int i = 0; i < result.Tables[$"{projectName}_ModSMells"].Rows.Count; i++)
-                    {
-                        All.Add(result.Tables[$"{projectName}_ModSMells"].Rows[i][2].ToString());
-                        Modularization.Add(result.Tables[$"{projectName}_ModSMells"].Rows[i][2].ToString());
-                    }
-                    for (int i = 0; i < result.Tables[$"{projectName}_HieSMells"].Rows.Count; i++)
-                    {
-                        All.Add(result.Tables[$"{projectName}_HieSMells"].Rows[i][2].ToString());
-                        Hierarchy.Add(result.Tables[$"{projectName}_HieSMells"].Rows[i][2].ToString());
-                    }
-                    All = All.Distinct().ToList();
-                    Abstraction = Abstraction.Distinct().ToList();
-                    Encapsulation = Encapsulation.Distinct().ToList();
-                    Modularization = Modularization.Distinct().ToList();
-                    Hierarchy = Hierarchy.Distinct().ToList();
                 }
             }
         }

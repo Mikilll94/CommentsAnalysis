@@ -93,6 +93,12 @@ namespace RoslynPlay
                 summaryWorksheet.Cells[3, 6].Value = "Total";
                 summaryWorksheet.Cells[4, 6].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmelly == true);
 
+                for (int i = 1; i <= 6; i++)
+                {
+                    summaryWorksheet.Column(i).AutoFit();
+                    summaryWorksheet.Column(i).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                }
+
                 package.Save();
             }
         }

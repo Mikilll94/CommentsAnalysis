@@ -8,17 +8,20 @@ namespace RoslynPlay
 {
     class Program
     {
+        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
+        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
+        static string smellsSheetPrefix = "EFCore";
+
         static void Main(string[] args)
         {
-            SmellyClasses smellyClasses = new SmellyClasses("GitExtensions");
+            SmellyClasses smellyClasses = new SmellyClasses(smellsExcelPath, smellsSheetPrefix);
 
             string fileContent;
             SyntaxTree tree;
             SyntaxNode root;
             CommentSyntaxWalker commentWalker;
             MethodAndClassesSyntaxWalker methodWalker;
-            string projectName = "gitextensions";
-            string[] files = Directory.GetFiles($"c:/Users/wasni/Desktop/{projectName}", $"*.cs", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(projectPath, $"*.cs", SearchOption.AllDirectories);
             var commentStore = new CommentStore();
 
             Console.WriteLine("Reading files...");
@@ -27,7 +30,7 @@ namespace RoslynPlay
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
-                string filePath = new Regex($@"{projectName}\\(.*)$").Match(file).Groups[1].ToString();
+                string filePath = new Regex($@"{projectPath}\\(.*)$").Match(file).Groups[1].ToString();
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
                 var locationStore = new LocationStore();
@@ -41,7 +44,7 @@ namespace RoslynPlay
 
             Console.WriteLine("\nCreating excel file...");
 
-            ExcelWriter excelWriter = new ExcelWriter("comments.xlsx");
+            ExcelWriter excelWriter = new ExcelWriter($"{smellsSheetPrefix}_comments.xlsx");
             excelWriter.Write(commentStore);
 
             Console.WriteLine("Finished");
