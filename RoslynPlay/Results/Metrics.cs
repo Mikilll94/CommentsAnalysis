@@ -10,6 +10,10 @@ namespace RoslynPlay
         public string MethodName { get; }
         public string ClassName { get; }
         public bool? IsClassSmelly { get; }
+        public bool? IsClassSmellyAbstraction { get; }
+        public bool? IsClassSmellyEncapsulation { get; }
+        public bool? IsClassSmellyModularization { get; }
+        public bool? IsClassSmellyHierarchy { get; }
         public int? WordsCount { get; }
         public bool? HasNothing { get; }
         public bool? HasQuestionMark { get; }
@@ -37,6 +41,10 @@ namespace RoslynPlay
                 LocationClass = locationstore.ClassLocations[lineEnd].Location;
                 ClassName = locationstore.ClassLocations[lineEnd].Name;
                 IsClassSmelly = locationstore.ClassLocations[lineEnd].IsSmelly;
+                IsClassSmellyAbstraction = locationstore.ClassLocations[lineEnd].IsSmellyAbstraction;
+                IsClassSmellyEncapsulation = locationstore.ClassLocations[lineEnd].IsSmellyEncapsulation;
+                IsClassSmellyModularization = locationstore.ClassLocations[lineEnd].IsSmellyModularization;
+                IsClassSmellyHierarchy = locationstore.ClassLocations[lineEnd].IsSmellyHierarchy;
             }
 
             HasNothing = new Regex("nothing", RegexOptions.IgnoreCase).IsMatch(content);

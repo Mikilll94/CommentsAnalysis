@@ -14,7 +14,11 @@ namespace RoslynPlay
                 {
                     Location = location,
                     Name = className,
-                    IsSmelly = SmellyClasses.Classes.Contains(className),
+                    IsSmelly = SmellyClasses.All.Contains(className),
+                    IsSmellyAbstraction = SmellyClasses.Abstraction.Contains(className),
+                    IsSmellyEncapsulation = SmellyClasses.Encapsulation.Contains(className),
+                    IsSmellyModularization = SmellyClasses.Modularization.Contains(className),
+                    IsSmellyHierarchy = SmellyClasses.Hierarchy.Contains(className),
                 });
         }
 
@@ -27,7 +31,11 @@ namespace RoslynPlay
                     {
                         Location = location,
                         Name = className,
-                        IsSmelly = SmellyClasses.Classes.Contains(className),
+                        IsSmelly = SmellyClasses.All.Contains(className),
+                        IsSmellyAbstraction = SmellyClasses.Abstraction.Contains(className),
+                        IsSmellyEncapsulation = SmellyClasses.Encapsulation.Contains(className),
+                        IsSmellyModularization = SmellyClasses.Modularization.Contains(className),
+                        IsSmellyHierarchy = SmellyClasses.Hierarchy.Contains(className),
                     });
             }
         }

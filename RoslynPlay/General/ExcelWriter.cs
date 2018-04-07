@@ -73,9 +73,25 @@ namespace RoslynPlay
 
                 ExcelWorksheet summaryWorksheet = package.Workbook.Worksheets.Add("Summary");
 
-                summaryWorksheet.Cells[1, 1].Value = "Percent of comments in smelly classes";
-                summaryWorksheet.Cells[2, 1].Value =
-                    $"{100.0 * commentStore.Comments.Count(c => c.Metrics.IsClassSmelly == true) / commentStore.Comments.Count}%";
+                summaryWorksheet.Cells[1, 1].Value = "Number of comments";
+                summaryWorksheet.Cells[1, 1, 1, 6].Merge = true;
+
+                summaryWorksheet.Cells[2, 1].Value = "Total";
+                summaryWorksheet.Cells[2, 1, 3, 1].Merge = true;
+                summaryWorksheet.Cells[4, 1].Value = commentStore.Comments.Count;
+
+                summaryWorksheet.Cells[2, 2].Value = "In smelly classes";
+                summaryWorksheet.Cells[2, 2, 2, 6].Merge = true;
+                summaryWorksheet.Cells[3, 2].Value = "Abstraction";
+                summaryWorksheet.Cells[4, 2].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyAbstraction == true);
+                summaryWorksheet.Cells[3, 3].Value = "Encapsulation";
+                summaryWorksheet.Cells[4, 3].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyEncapsulation == true);
+                summaryWorksheet.Cells[3, 4].Value = "Modularization";
+                summaryWorksheet.Cells[4, 4].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyModularization == true);
+                summaryWorksheet.Cells[3, 5].Value = "Hierarchy";
+                summaryWorksheet.Cells[4, 5].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyHierarchy == true);
+                summaryWorksheet.Cells[3, 6].Value = "Total";
+                summaryWorksheet.Cells[4, 6].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmelly == true);
 
                 package.Save();
             }
