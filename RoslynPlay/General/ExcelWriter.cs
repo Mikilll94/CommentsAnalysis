@@ -80,18 +80,22 @@ namespace RoslynPlay
                 summaryWorksheet.Cells[2, 1, 3, 1].Merge = true;
                 summaryWorksheet.Cells[4, 1].Value = commentStore.Comments.Count;
 
-                summaryWorksheet.Cells[2, 2].Value = "In smelly classes";
-                summaryWorksheet.Cells[2, 2, 2, 6].Merge = true;
-                summaryWorksheet.Cells[3, 2].Value = "Abstraction";
-                summaryWorksheet.Cells[4, 2].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyAbstraction == true);
-                summaryWorksheet.Cells[3, 3].Value = "Encapsulation";
-                summaryWorksheet.Cells[4, 3].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyEncapsulation == true);
-                summaryWorksheet.Cells[3, 4].Value = "Modularization";
-                summaryWorksheet.Cells[4, 4].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyModularization == true);
-                summaryWorksheet.Cells[3, 5].Value = "Hierarchy";
-                summaryWorksheet.Cells[4, 5].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyHierarchy == true);
-                summaryWorksheet.Cells[3, 6].Value = "Total";
-                summaryWorksheet.Cells[4, 6].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmelly == true);
+                summaryWorksheet.Cells[2, 3].Value = "In smelly classes";
+                summaryWorksheet.Cells[2, 3, 2, 8].Merge = true;
+                summaryWorksheet.Cells[3, 2].Value = "Bad";
+                summaryWorksheet.Cells[4, 2].Value = commentStore.Comments.Count(c => c.Evaluation.IsBad() == true);
+                summaryWorksheet.Cells[3, 3].Value = "Bad";
+                summaryWorksheet.Cells[4, 3].Value = commentStore.Comments.Count(c => c.Evaluation.IsBad() == true && c.Metrics.IsClassSmelly == true);
+                summaryWorksheet.Cells[3, 4].Value = "Abstraction";
+                summaryWorksheet.Cells[4, 4].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyAbstraction == true);
+                summaryWorksheet.Cells[3, 5].Value = "Encapsulation";
+                summaryWorksheet.Cells[4, 5].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyEncapsulation == true);
+                summaryWorksheet.Cells[3, 6].Value = "Modularization";
+                summaryWorksheet.Cells[4, 6].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyModularization == true);
+                summaryWorksheet.Cells[3, 7].Value = "Hierarchy";
+                summaryWorksheet.Cells[4, 7].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmellyHierarchy == true);
+                summaryWorksheet.Cells[3, 8].Value = "Total";
+                summaryWorksheet.Cells[4, 8].Value = commentStore.Comments.Count(c => c.Metrics.IsClassSmelly == true);
 
                 for (int i = 1; i <= 6; i++)
                 {
