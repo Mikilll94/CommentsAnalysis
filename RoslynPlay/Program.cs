@@ -8,7 +8,7 @@ namespace RoslynPlay
 {
     class Program
     {
-        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions";
+        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions-master";
         static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
         static string smellsSheetPrefix = "GitExtensions";
 
@@ -19,8 +19,8 @@ namespace RoslynPlay
             string fileContent;
             SyntaxTree tree;
             SyntaxNode root;
-            CommentSyntaxWalker commentWalker;
-            MethodAndClassesSyntaxWalker methodWalker;
+            CommentsWalker commentWalker;
+            MethodsAndClassesWalker methodWalker;
             string[] files = Directory.GetFiles(projectPath, $"*.cs", SearchOption.AllDirectories);
             var commentStore = new CommentStore();
 
@@ -30,13 +30,15 @@ namespace RoslynPlay
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
+                fileContent = PreprocessFileContent(fileContent);
+
                 string filePath = new Regex($@"{projectPath}\\(.*)$").Match(file).Groups[1].ToString();
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
                 var locationStore = new LocationStore();
-                methodWalker = new MethodAndClassesSyntaxWalker(filePath, locationStore);
+                methodWalker = new MethodsAndClassesWalker(filePath, locationStore);
                 methodWalker.Visit(root);
-                commentWalker = new CommentSyntaxWalker(filePath, locationStore, commentStore);
+                commentWalker = new CommentsWalker(filePath, locationStore, commentStore);
                 commentWalker.Visit(root);
 
                 progressBar.UpdateAndDisplay();
@@ -49,6 +51,30 @@ namespace RoslynPlay
 
             Console.WriteLine("Finished");
             Console.ReadKey();
+        }
+
+        private static string PreprocessFileContent(string fileContent)
+        {
+            string[] lines = fileContent.Split("\n");
+            Regex singleLineCommentRegex = new Regex(@"^\/\/");
+            for (int i = 0; i < lines.Length; i++)
+            {
+                if (singleLineCommentRegex.IsMatch(lines[i]))
+                {
+                    string line = lines[i];
+                    int startIndex = i;
+                    i++;
+                    while(singleLineCommentRegex.IsMatch(lines[i]))
+                    {
+                        line += $" {lines[i].Replace(@"//", String.Empty)}";
+                        lines[i] = String.Empty;
+                        i++;
+                    }
+                    lines[startIndex] = line;
+                }
+            }
+            fileContent = String.Join("\n", lines);
+            return fileContent;
         }
     }
 }

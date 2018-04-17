@@ -3,12 +3,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RoslynPlay
 {
-    class MethodAndClassesSyntaxWalker : CSharpSyntaxWalker
+    class MethodsAndClassesWalker : CSharpSyntaxWalker
     {
         private string _fileName;
         private LocationStore _locationStore;
 
-        public MethodAndClassesSyntaxWalker(string fileName, LocationStore locationStore)
+        public MethodsAndClassesWalker(string fileName, LocationStore locationStore)
         {
             _fileName = fileName;
             _locationStore = locationStore;

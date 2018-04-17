@@ -4,13 +4,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RoslynPlay
 {
-    public class CommentSyntaxWalker : CSharpSyntaxWalker
+    public class CommentsWalker : CSharpSyntaxWalker
     {
         private string _fileName;
         private LocationStore _commentLocationStore;
         private CommentStore _commentStore;
 
-        public CommentSyntaxWalker(string fileName, LocationStore commentLocationStore,
+        public CommentsWalker(string fileName, LocationStore commentLocationStore,
             CommentStore commentStore)
             : base(SyntaxWalkerDepth.StructuredTrivia)
         {
