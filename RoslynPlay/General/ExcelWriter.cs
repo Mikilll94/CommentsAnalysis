@@ -71,6 +71,28 @@ namespace RoslynPlay
                     worksheet.Column(i).AutoFit();
                 }
 
+                #region "Classes" sheet
+
+                ExcelWorksheet classesWorksheet = package.Workbook.Worksheets.Add("Classes");
+
+                classesWorksheet.Cells[1, 1].Value = "File name";
+                classesWorksheet.Cells[1, 2].Value = "Class";
+                classesWorksheet.Cells[1, 3].Value = "Smells count";
+                classesWorksheet.Cells[1, 4].Value = "Comments count";
+
+                Class[] classes = ClassStore.Classes.ToArray();
+
+                for (int i = 2; i < classes.Length; i++)
+                {
+                    classesWorksheet.Cells[i, 1].Value = classes[i].FileName;
+                    classesWorksheet.Cells[i, 2].Value = classes[i].Name;
+                    classesWorksheet.Cells[i, 3].Value = classes[i].SmellsCount;
+                    classesWorksheet.Cells[i, 4].Value = 
+                        commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName);
+                }
+
+                #endregion
+
                 ExcelWorksheet summaryWorksheet = package.Workbook.Worksheets.Add("Summary");
 
                 summaryWorksheet.Cells[1, 1].Value = "Number of comments";

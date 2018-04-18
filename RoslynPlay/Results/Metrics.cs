@@ -39,12 +39,12 @@ namespace RoslynPlay
             if (locationstore.ClassLocations.ContainsKey(lineEnd))
             {
                 LocationClass = locationstore.ClassLocations[lineEnd].Location;
-                ClassName = locationstore.ClassLocations[lineEnd].Name;
-                IsClassSmelly = locationstore.ClassLocations[lineEnd].IsSmelly;
-                IsClassSmellyAbstraction = locationstore.ClassLocations[lineEnd].IsSmellyAbstraction;
-                IsClassSmellyEncapsulation = locationstore.ClassLocations[lineEnd].IsSmellyEncapsulation;
-                IsClassSmellyModularization = locationstore.ClassLocations[lineEnd].IsSmellyModularization;
-                IsClassSmellyHierarchy = locationstore.ClassLocations[lineEnd].IsSmellyHierarchy;
+                ClassName = locationstore.ClassLocations[lineEnd].Class.Name;
+                IsClassSmelly = locationstore.ClassLocations[lineEnd].Class.IsSmelly;
+                IsClassSmellyAbstraction = locationstore.ClassLocations[lineEnd].Class.IsSmellyAbstraction;
+                IsClassSmellyEncapsulation = locationstore.ClassLocations[lineEnd].Class.IsSmellyEncapsulation;
+                IsClassSmellyModularization = locationstore.ClassLocations[lineEnd].Class.IsSmellyModularization;
+                IsClassSmellyHierarchy = locationstore.ClassLocations[lineEnd].Class.IsSmellyHierarchy;
             }
 
             HasNothing = new Regex("nothing", RegexOptions.IgnoreCase).IsMatch(content);

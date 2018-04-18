@@ -8,11 +8,11 @@ namespace RoslynPlay
 {
     class SmellyClasses
     {
-        public static HashSet<string> All { get; set; } = new HashSet<string>();
-        public static HashSet<string> Abstraction { get; set; } = new HashSet<string>();
-        public static HashSet<string> Encapsulation { get; set; } = new HashSet<string>();
-        public static HashSet<string> Modularization { get; set; } = new HashSet<string>();
-        public static HashSet<string> Hierarchy { get; set; } = new HashSet<string>();
+        public static List<string> All { get; set; } = new List<string>();
+        public static List<string> Abstraction { get; set; } = new List<string>();
+        public static List<string> Encapsulation { get; set; } = new List<string>();
+        public static List<string> Modularization { get; set; } = new List<string>();
+        public static List<string> Hierarchy { get; set; } = new List<string>();
 
         public SmellyClasses(string projectName, string sheetPrefix)
         {
@@ -23,7 +23,7 @@ namespace RoslynPlay
                 {
                     var result = reader.AsDataSet();
 
-                    Dictionary<string, HashSet<string>> sheets = new Dictionary<string, HashSet<string>>()
+                    Dictionary<string, List<string>> sheets = new Dictionary<string, List<string>>()
                     {
                         { "AbsSMells", Abstraction },
                         { "EncSMells", Encapsulation },

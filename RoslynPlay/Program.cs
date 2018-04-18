@@ -8,9 +8,13 @@ namespace RoslynPlay
 {
     class Program
     {
-        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions-master";
-        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
-        static string smellsSheetPrefix = "GitExtensions";
+        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions-master";
+        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
+        //static string smellsSheetPrefix = "GitExtensions";
+
+        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
+        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
+        static string smellsSheetPrefix = "EFCore";
 
         static void Main(string[] args)
         {
@@ -30,7 +34,7 @@ namespace RoslynPlay
             foreach (var file in files)
             {
                 fileContent = File.ReadAllText(file);
-                fileContent = PreprocessFileContent(fileContent);
+                fileContent = TransformSingleLineComments(fileContent);
 
                 string filePath = new Regex($@"{projectPath}\\(.*)$").Match(file).Groups[1].ToString();
                 tree = CSharpSyntaxTree.ParseText(fileContent);
@@ -53,9 +57,9 @@ namespace RoslynPlay
             Console.ReadKey();
         }
 
-        private static string PreprocessFileContent(string fileContent)
+        private static string TransformSingleLineComments(string fileContent)
         {
-            string[] lines = fileContent.Split("\n");
+            string[] lines = fileContent.Split(Environment.NewLine);
             Regex singleLineCommentRegex = new Regex(@"^\/\/");
             for (int i = 0; i < lines.Length; i++)
             {
@@ -73,7 +77,7 @@ namespace RoslynPlay
                     lines[startIndex] = line;
                 }
             }
-            fileContent = String.Join("\n", lines);
+            fileContent = String.Join(Environment.NewLine, lines);
             return fileContent;
         }
     }
