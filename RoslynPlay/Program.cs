@@ -8,13 +8,13 @@ namespace RoslynPlay
 {
     class Program
     {
-        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions-master";
-        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
-        //static string smellsSheetPrefix = "GitExtensions";
+        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions-master";
+        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
+        static string smellsSheetPrefix = "GitExtensions";
 
-        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
-        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
-        static string smellsSheetPrefix = "EFCore";
+        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
+        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
+        //static string smellsSheetPrefix = "EFCore";
 
         static void Main(string[] args)
         {
@@ -59,16 +59,19 @@ namespace RoslynPlay
 
         private static string TransformSingleLineComments(string fileContent)
         {
-            string[] lines = fileContent.Split(Environment.NewLine);
-            Regex singleLineCommentRegex = new Regex(@"^\/\/");
+            fileContent = fileContent.Replace("\r\n", "\n");
+            string[] lines = fileContent.Split("\n");
+            Regex singleLineCommentRegex = new Regex(@"^[\s]*\/\/");
+
+
             for (int i = 0; i < lines.Length; i++)
             {
-                if (singleLineCommentRegex.IsMatch(lines[i]))
+                if (StartsWithSingleLineComment(lines[i]))
                 {
                     string line = lines[i];
                     int startIndex = i;
                     i++;
-                    while(singleLineCommentRegex.IsMatch(lines[i]))
+                    while (StartsWithSingleLineComment(lines[i]))
                     {
                         line += $" {lines[i].Replace(@"//", String.Empty)}";
                         lines[i] = String.Empty;
@@ -77,8 +80,13 @@ namespace RoslynPlay
                     lines[startIndex] = line;
                 }
             }
-            fileContent = String.Join(Environment.NewLine, lines);
+            fileContent = String.Join("\n", lines);
             return fileContent;
+        }
+
+        private static bool StartsWithSingleLineComment(string line)
+        {
+            return line.TrimStart().StartsWith(@"//") && !line.TrimStart().StartsWith(@"///");
         }
     }
 }
