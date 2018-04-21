@@ -5,21 +5,8 @@ namespace RoslynPlay
 {
     class ClassesWorksheet : Worksheet
     {
-        private ExcelPackage _package;
-        private CommentStore _commentStore;
-
-        public ClassesWorksheet(ExcelPackage package, CommentStore commentStore)
+        public ClassesWorksheet(ExcelPackage package, CommentStore commentStore) : base(package, commentStore)
         {
-            _package = package;
-            _commentStore = commentStore;
-        }
-
-        public override void Create()
-        {
-            ExcelWorksheet worksheet = _package.Workbook.Worksheets.Add("Classes");
-            WriteHeaders(worksheet);
-            WriteData(worksheet);
-            FitColumns(worksheet);
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)
@@ -42,11 +29,6 @@ namespace RoslynPlay
                 worksheet.Cells[i, 4].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName);
             }
-        }
-
-        protected override void FitColumns(ExcelWorksheet worksheet)
-        {
-
         }
     }
 }

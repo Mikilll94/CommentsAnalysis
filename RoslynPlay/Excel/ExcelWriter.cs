@@ -18,10 +18,10 @@ namespace RoslynPlay
         {
             using (ExcelPackage package = new ExcelPackage(_file))
             {
-                new CommentsWorksheet(package, commentStore).Create();
-                new ClassesWorksheet(package, commentStore).Create();
-                new RankingWorksheet(package).Create();
-                new SummaryWorksheet(package, commentStore).Create();
+                new CommentsWorksheet(package, commentStore).Create("Comments");
+                new ClassesWorksheet(package, commentStore).Create("Classes");
+                new RankingWorksheet(package).Create("Ranking");
+                new SummaryWorksheet(package, commentStore).Create("Summary");
 
                 package.Save();
             }

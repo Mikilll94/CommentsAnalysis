@@ -1,26 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using OfficeOpenXml;
 
 namespace RoslynPlay
 {
     public class RankingWorksheet : Worksheet
     {
-        private ExcelPackage _package;
-
-        public RankingWorksheet(ExcelPackage package)
+        public RankingWorksheet(ExcelPackage package) : base(package)
         {
-            _package = package;
-        }
-
-        public override void Create()
-        {
-            ExcelWorksheet worksheet = _package.Workbook.Worksheets.Add("Ranking");
-            WriteHeaders(worksheet);
-            WriteData(worksheet);
-            FitColumns(worksheet);
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)
@@ -43,10 +29,6 @@ namespace RoslynPlay
                 worksheet.Cells[rankingRowNumber, 3].Value = @class.SmellsCount;
                 rankingRowNumber++;
             }
-        }
-
-        protected override void FitColumns(ExcelWorksheet worksheet)
-        {
         }
     }
 }

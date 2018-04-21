@@ -4,26 +4,12 @@ namespace RoslynPlay
 {
     class CommentsWorksheet : Worksheet
     {
-        private ExcelPackage _package;
-        private CommentStore _commentStore;
-
-        public CommentsWorksheet(ExcelPackage package, CommentStore commentStore)
+        public CommentsWorksheet(ExcelPackage package, CommentStore commentStore) : base(package, commentStore)
         {
-            _package = package;
-            _commentStore = commentStore;
-        }
-
-        public override void Create()
-        {
-            ExcelWorksheet worksheet = _package.Workbook.Worksheets.Add("Comments");
-            WriteHeaders(worksheet);
-            WriteData(worksheet);
-            FitColumns(worksheet);
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)
         {
-            worksheet.View.FreezePanes(2, 1);
             worksheet.Cells[1, 1].Value = "File";
             worksheet.Cells[1, 2].Value = "Line";
             worksheet.Cells[1, 3].Value = "Type";
