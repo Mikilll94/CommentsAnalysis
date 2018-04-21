@@ -5,8 +5,11 @@ namespace RoslynPlay
 {
     public class RankingWorksheet : Worksheet
     {
-        public RankingWorksheet(ExcelPackage package) : base(package)
+        private ClassStore _classStore;
+
+        public RankingWorksheet(ExcelPackage package, ClassStore classStore) : base(package)
         {
+            _classStore = classStore;
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)
@@ -18,7 +21,7 @@ namespace RoslynPlay
 
         protected override void WriteData(ExcelWorksheet worksheet)
         {
-            Class[] classesWithMostSmells = ClassStore.Classes.OrderByDescending(c => c.SmellsCount).Take(10).ToArray();
+            Class[] classesWithMostSmells = _classStore.Classes.OrderByDescending(c => c.SmellsCount).Take(10).ToArray();
 
             int rankingRowNumber = 2;
 

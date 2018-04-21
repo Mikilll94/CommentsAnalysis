@@ -5,8 +5,13 @@ namespace RoslynPlay
 {
     class ClassesWorksheet : Worksheet
     {
-        public ClassesWorksheet(ExcelPackage package, CommentStore commentStore) : base(package, commentStore)
+        private ClassStore _classStore;
+        private CommentStore _commentStore;
+
+        public ClassesWorksheet(ExcelPackage package, CommentStore commentStore, ClassStore classStore) : base(package)
         {
+            _classStore = classStore;
+            _commentStore = commentStore;
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)
@@ -19,7 +24,7 @@ namespace RoslynPlay
 
         protected override void WriteData(ExcelWorksheet worksheet)
         {
-            Class[] classes = ClassStore.Classes.ToArray();
+            Class[] classes = _classStore.Classes.ToArray();
 
             for (int i = 2; i < classes.Length; i++)
             {

@@ -8,11 +8,13 @@ namespace RoslynPlay
     {
         private string _fileName;
         private LocationStore _locationStore;
+        private ClassStore _classStore;
 
-        public MethodsAndClassesWalker(string fileName, LocationStore locationStore)
+        public MethodsAndClassesWalker(string fileName, LocationStore locationStore, ClassStore classStore)
         {
             _fileName = fileName;
             _locationStore = locationStore;
+            _classStore = classStore;
         }
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
@@ -63,7 +65,7 @@ namespace RoslynPlay
             _locationStore.AddClassLocation(startLine + 1, endLine - 1, "class_inner", visitedClass);
             _locationStore.AddClassLocation(endLine, "class_end", visitedClass);
 
-            ClassStore.Classes.Add(visitedClass);
+            _classStore.Classes.Add(visitedClass);
 
             base.VisitClassDeclaration(node);
         }

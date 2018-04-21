@@ -6,8 +6,11 @@ namespace RoslynPlay
 {
     class SummaryWorksheet : Worksheet
     {
-        public SummaryWorksheet(ExcelPackage package, CommentStore commentStore) : base(package, commentStore)
+        private CommentStore _commentStore;
+
+        public SummaryWorksheet(ExcelPackage package, CommentStore commentStore) : base(package)
         {
+            _commentStore = commentStore;
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)

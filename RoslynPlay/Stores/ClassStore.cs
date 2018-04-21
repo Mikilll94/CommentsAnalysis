@@ -2,8 +2,8 @@
 
 namespace RoslynPlay
 {
-    class ClassStore
+    public class ClassStore
     {
-        public static HashSet<Class> Classes { get; set; } = new HashSet<Class>();
+        public HashSet<Class> Classes { get; set; } = new HashSet<Class>();
     }
 }

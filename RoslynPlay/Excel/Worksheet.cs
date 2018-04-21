@@ -5,12 +5,10 @@ namespace RoslynPlay
     public class Worksheet
     {
         protected ExcelPackage _package;
-        protected CommentStore _commentStore;
 
-        public Worksheet(ExcelPackage package, CommentStore commentStore = null)
+        public Worksheet(ExcelPackage package)
         {
             _package = package;
-            _commentStore = commentStore;
         }
 
         public void Create(string worksheetName)

@@ -14,13 +14,13 @@ namespace RoslynPlay
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
-        public void Write(CommentStore commentStore)
+        public void Write(CommentStore commentStore, ClassStore classStore)
         {
             using (ExcelPackage package = new ExcelPackage(_file))
             {
                 new CommentsWorksheet(package, commentStore).Create("Comments");
-                new ClassesWorksheet(package, commentStore).Create("Classes");
-                new RankingWorksheet(package).Create("Ranking");
+                new ClassesWorksheet(package, commentStore, classStore).Create("Classes");
+                new RankingWorksheet(package, classStore).Create("Ranking");
                 new SummaryWorksheet(package, commentStore).Create("Summary");
 
                 package.Save();

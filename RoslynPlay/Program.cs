@@ -27,9 +27,11 @@ namespace RoslynPlay
             MethodsAndClassesWalker methodWalker;
             string[] files = Directory.GetFiles(projectPath, $"*.cs", SearchOption.AllDirectories);
             var commentStore = new CommentStore();
+            var classStore = new ClassStore();
 
             Console.WriteLine("Reading files...");
             ProgressBar progressBar = new ProgressBar(files.Length);
+
 
             foreach (var file in files)
             {
@@ -40,7 +42,7 @@ namespace RoslynPlay
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
                 var locationStore = new LocationStore();
-                methodWalker = new MethodsAndClassesWalker(filePath, locationStore);
+                methodWalker = new MethodsAndClassesWalker(filePath, locationStore, classStore);
                 methodWalker.Visit(root);
                 commentWalker = new CommentsWalker(filePath, locationStore, commentStore);
                 commentWalker.Visit(root);
@@ -51,7 +53,7 @@ namespace RoslynPlay
             Console.WriteLine("\nCreating excel file...");
 
             ExcelWriter excelWriter = new ExcelWriter($"{smellsSheetPrefix}_comments.xlsx");
-            excelWriter.Write(commentStore);
+            excelWriter.Write(commentStore, classStore);
 
             Console.WriteLine("Finished");
             Console.ReadKey();
