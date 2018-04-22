@@ -20,7 +20,8 @@ namespace RoslynPlay
             {
                 new CommentsWorksheet(package, commentStore).Create("Comments");
                 new ClassesWorksheet(package, commentStore, classStore).Create("Classes");
-                new RankingWorksheet(package, classStore).Create("Ranking");
+                new ClassesWithMostSmellsWorksheet(package, commentStore, classStore).Create("ClassesWithMostSmells");
+                new ClassesWithMostComments(package, commentStore, classStore).Create("ClassesWithMostComments");
                 new SummaryWorksheet(package, commentStore).Create("Summary");
 
                 package.Save();
