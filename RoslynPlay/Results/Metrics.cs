@@ -32,8 +32,8 @@ namespace RoslynPlay
 
             if (locationstore.MethodLocations.ContainsKey(lineEnd))
             {
-                LocationMethod = locationstore.MethodLocations[lineEnd][0];
-                MethodName = locationstore.MethodLocations[lineEnd][1];
+                LocationMethod = locationstore.MethodLocations[lineEnd].Location;
+                MethodName = locationstore.MethodLocations[lineEnd].Method;
 
             }
             if (locationstore.ClassLocations.ContainsKey(lineEnd))
