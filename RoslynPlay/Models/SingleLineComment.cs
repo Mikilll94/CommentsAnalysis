@@ -5,7 +5,7 @@
         public SingleLineComment(string content, int line, LocationStore commentLocationstore)
         {
             Content = content.Substring(content.IndexOf("//") + 2);
-            Type = "single_line_comment";
+            Type = CommentType.SingleLine;
             LineStart = line;
             LineEnd = line;
             Metrics = new Metrics(Content, line, Type, commentLocationstore);

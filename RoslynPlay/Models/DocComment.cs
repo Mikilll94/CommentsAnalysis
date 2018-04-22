@@ -8,7 +8,7 @@ namespace RoslynPlay
         {
             Content = Regex.Replace(content, @"(\/\/\/)", "");
             Content = Regex.Replace(Content, "(<.*?>)", "");
-            Type = "doc_comment";
+            Type = CommentType.Doc;
             LineStart = lineStart;
             LineEnd = lineEnd;
             Metrics = new Metrics(Content, lineEnd, Type, commentLocationstore);

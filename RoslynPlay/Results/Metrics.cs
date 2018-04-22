@@ -21,10 +21,10 @@ namespace RoslynPlay
         public bool? HasCode { get; }
         public double? CoherenceCoefficient { get; }
 
-        public Metrics(string content, int lineEnd, string type, LocationStore locationstore)
+        public Metrics(string content, int lineEnd, CommentType type, LocationStore locationstore)
         {
             char[] delimiters = new char[] { ' ', '\t', '\r', '\n' };
-            if (type == "single_line_comment")
+            if (type == CommentType.SingleLine)
             {
                 string normalizedContent = WordTransform.RemoveSpecialCharacters(content);
                 WordsCount = normalizedContent.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;

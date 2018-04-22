@@ -50,13 +50,13 @@ namespace RoslynPlay
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName);
                 worksheet.Cells[i, 5].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Type == "single_line_comment");
+                        && c.Type == CommentType.SingleLine);
                 worksheet.Cells[i, 6].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Type == "multi_line_comment");
+                        && c.Type == CommentType.MultiLine);
                 worksheet.Cells[i, 7].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Type == "doc_comment");
+                        && c.Type == CommentType.Doc);
 
                 worksheet.Cells[i, 8].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
