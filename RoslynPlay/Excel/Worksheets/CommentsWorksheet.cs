@@ -48,9 +48,9 @@ namespace RoslynPlay
                 excelRowWriter.WriteCell(7, comment.Metrics.HasQuestionMark, comment.Metrics.HasQuestionMark);
                 excelRowWriter.WriteCell(8, comment.Metrics.HasCode, comment.Metrics.HasCode);
                 excelRowWriter.WriteCell(9, comment.Metrics.CoherenceCoefficient, comment.Evaluation.CoherenceCoefficient());
-                excelRowWriter.WriteCell(10, comment.Metrics.LocationMethod);
+                excelRowWriter.WriteCell(10, comment.Metrics.LocationRelativeToMethod);
                 excelRowWriter.WriteCell(11, comment.Metrics.MethodName);
-                excelRowWriter.WriteCell(12, comment.Metrics.LocationClass);
+                excelRowWriter.WriteCell(12, comment.Metrics.LocationRelativeToClass);
                 excelRowWriter.WriteCell(13, comment.Metrics.ClassName);
                 excelRowWriter.WriteCell(14, comment.Metrics.IsClassSmelly, comment.Metrics.IsClassSmelly);
                 excelRowWriter.WriteCell(15, comment.Evaluation.IsBad(), comment.Evaluation.IsBad());

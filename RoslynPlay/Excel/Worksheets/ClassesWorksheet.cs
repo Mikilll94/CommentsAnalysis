@@ -60,16 +60,16 @@ namespace RoslynPlay
 
                 worksheet.Cells[i, 8].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationClass == "class_description");
+                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassDescription);
                 worksheet.Cells[i, 9].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationClass == "class_start");
+                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassStart);
                 worksheet.Cells[i, 10].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationClass == "class_inner");
+                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassInner);
                 worksheet.Cells[i, 11].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationClass == "class_end");
+                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassEnd);
             }
         }
 

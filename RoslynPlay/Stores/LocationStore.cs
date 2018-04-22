@@ -2,34 +2,64 @@
 
 namespace RoslynPlay
 {
+    public enum LocationRelativeToMethod
+    {
+        MethodDescription,
+        MethodStart,
+        MethodInner,
+        MethodEnd,
+    };
+
+    public enum LocationRelativeToClass
+    {
+        ClassDescription,
+        ClassStart,
+        ClassInner,
+        ClassEnd,
+    };
+
+    public class LocationRelativeToMethodInfo
+    {
+        public LocationRelativeToMethod Location { get; set; }
+        public string Method { get; set; }
+    }
+
+    public class LocationRelativeToClassInfo
+    {
+        public LocationRelativeToClass Location { get; set; }
+        public Class @Class { get; set; }
+    }
+
     public class LocationStore
     {
-        public Dictionary<int, dynamic> MethodLocations { get; } = new Dictionary<int, dynamic>();
-        public Dictionary<int, dynamic> ClassLocations { get; } = new Dictionary<int, dynamic>();
+        public Dictionary<int, LocationRelativeToMethodInfo> LocationsRelativeToMethod { get; }
+            = new Dictionary<int, LocationRelativeToMethodInfo>();
+        public Dictionary<int, LocationRelativeToClassInfo> LocationsRelativeToClass { get; }
+            = new Dictionary<int, LocationRelativeToClassInfo>();
 
-        public void AddClassLocation(int line, string location, Class @class)
+        public void AddLocationRelativeToMethod(int line, LocationRelativeToMethod location, string methodName)
         {
-            ClassLocations.TryAdd(line, new { Location = location, Class = @class });
+            LocationsRelativeToMethod.TryAdd(line, new LocationRelativeToMethodInfo() { Location = location, Method = methodName });
         }
 
-        public void AddClassLocation(int startLine, int endLine, string location, Class @class)
+        public void AddLocationRelativeToMethod(int startLine, int endLine, LocationRelativeToMethod location, string methodName)
         {
             for (int i = startLine; i <= endLine; i++)
             {
-                ClassLocations.TryAdd(i, new { Location = location, Class = @class });
+                LocationsRelativeToMethod.TryAdd(i, new LocationRelativeToMethodInfo() { Location = location, Method = methodName });
             }
         }
 
-        public void AddMethodLocation(int line, string location, string methodName)
+        public void AddLocationRelativeToClass(int line, LocationRelativeToClass location, Class @class)
         {
-            MethodLocations.TryAdd(line, new { Location = location, Method = methodName });
+            LocationsRelativeToClass.TryAdd(line, new LocationRelativeToClassInfo() { Location = location, Class = @class });
         }
 
-        public void AddMethodLocation(int startLine, int endLine, string location, string methodName)
+        public void AddLocationRelativeToClass(int startLine, int endLine, LocationRelativeToClass location, Class @class)
         {
             for (int i = startLine; i <= endLine; i++)
             {
-                MethodLocations.TryAdd(i, new { Location = location, Method = methodName });
+                LocationsRelativeToClass.TryAdd(i, new LocationRelativeToClassInfo() { Location = location, Class = @class });
             }
         }
     }

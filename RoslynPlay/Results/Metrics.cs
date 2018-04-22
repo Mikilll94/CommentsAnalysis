@@ -5,8 +5,8 @@ namespace RoslynPlay
 {
     public class Metrics
     {
-        public string LocationMethod { get; }
-        public string LocationClass { get; }
+        public LocationRelativeToMethod LocationRelativeToMethod { get; }
+        public LocationRelativeToClass LocationRelativeToClass { get; }
         public string MethodName { get; }
         public string ClassName { get; }
         public bool? IsClassSmelly { get; }
@@ -30,21 +30,21 @@ namespace RoslynPlay
                 WordsCount = normalizedContent.Split(delimiters, StringSplitOptions.RemoveEmptyEntries).Length;
             }
 
-            if (locationstore.MethodLocations.ContainsKey(lineEnd))
+            if (locationstore.LocationsRelativeToMethod.ContainsKey(lineEnd))
             {
-                LocationMethod = locationstore.MethodLocations[lineEnd].Location;
-                MethodName = locationstore.MethodLocations[lineEnd].Method;
+                LocationRelativeToMethod = locationstore.LocationsRelativeToMethod[lineEnd].Location;
+                MethodName = locationstore.LocationsRelativeToMethod[lineEnd].Method;
 
             }
-            if (locationstore.ClassLocations.ContainsKey(lineEnd))
+            if (locationstore.LocationsRelativeToClass.ContainsKey(lineEnd))
             {
-                LocationClass = locationstore.ClassLocations[lineEnd].Location;
-                ClassName = locationstore.ClassLocations[lineEnd].Class.Name;
-                IsClassSmelly = locationstore.ClassLocations[lineEnd].Class.IsSmelly;
-                IsClassSmellyAbstraction = locationstore.ClassLocations[lineEnd].Class.IsSmellyAbstraction;
-                IsClassSmellyEncapsulation = locationstore.ClassLocations[lineEnd].Class.IsSmellyEncapsulation;
-                IsClassSmellyModularization = locationstore.ClassLocations[lineEnd].Class.IsSmellyModularization;
-                IsClassSmellyHierarchy = locationstore.ClassLocations[lineEnd].Class.IsSmellyHierarchy;
+                LocationRelativeToClass = locationstore.LocationsRelativeToClass[lineEnd].Location;
+                ClassName = locationstore.LocationsRelativeToClass[lineEnd].Class.Name;
+                IsClassSmelly = locationstore.LocationsRelativeToClass[lineEnd].Class.IsSmelly;
+                IsClassSmellyAbstraction = locationstore.LocationsRelativeToClass[lineEnd].Class.IsSmellyAbstraction;
+                IsClassSmellyEncapsulation = locationstore.LocationsRelativeToClass[lineEnd].Class.IsSmellyEncapsulation;
+                IsClassSmellyModularization = locationstore.LocationsRelativeToClass[lineEnd].Class.IsSmellyModularization;
+                IsClassSmellyHierarchy = locationstore.LocationsRelativeToClass[lineEnd].Class.IsSmellyHierarchy;
             }
 
             HasNothing = new Regex("nothing", RegexOptions.IgnoreCase).IsMatch(content);
@@ -52,7 +52,7 @@ namespace RoslynPlay
             HasExclamationMark = new Regex("!").IsMatch(content);
             HasCode = CodeDetector.HasCode(content);
 
-            if (MethodName != null && LocationMethod == "method_description")
+            if (MethodName != null && LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription)
             {
                 CoherenceCoefficient = RoslynPlay.CoherenceCoefficient.Compute(content, MethodName);
             }

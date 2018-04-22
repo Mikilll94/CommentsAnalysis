@@ -23,10 +23,10 @@ namespace RoslynPlay
             int endLine = node.GetLocation().GetLineSpan().EndLinePosition.Line + 1;
             string methodName = node.Identifier.ToString();
 
-            _locationStore.AddMethodLocation(startLine - 1, "method_description", methodName);
-            _locationStore.AddMethodLocation(startLine, "method_start", methodName);
-            _locationStore.AddMethodLocation(startLine + 1, endLine - 1, "method_inner", methodName);
-            _locationStore.AddMethodLocation(endLine, "method_end", methodName);
+            _locationStore.AddLocationRelativeToMethod(startLine - 1, LocationRelativeToMethod.MethodDescription, methodName);
+            _locationStore.AddLocationRelativeToMethod(startLine, LocationRelativeToMethod.MethodStart, methodName);
+            _locationStore.AddLocationRelativeToMethod(startLine + 1, endLine - 1, LocationRelativeToMethod.MethodInner, methodName);
+            _locationStore.AddLocationRelativeToMethod(endLine, LocationRelativeToMethod.MethodEnd, methodName);
             base.VisitMethodDeclaration(node);
         }
 
@@ -36,10 +36,10 @@ namespace RoslynPlay
             int endLine = node.GetLocation().GetLineSpan().EndLinePosition.Line + 1;
             string methodName = node.Identifier.ToString();
 
-            _locationStore.AddMethodLocation(startLine - 1, "method_description", methodName);
-            _locationStore.AddMethodLocation(startLine, "method_start", methodName);
-            _locationStore.AddMethodLocation(startLine + 1, endLine - 1, "method_inner", methodName);
-            _locationStore.AddMethodLocation(endLine, "method_end", methodName);
+            _locationStore.AddLocationRelativeToMethod(startLine - 1, LocationRelativeToMethod.MethodDescription, methodName);
+            _locationStore.AddLocationRelativeToMethod(startLine, LocationRelativeToMethod.MethodStart, methodName);
+            _locationStore.AddLocationRelativeToMethod(startLine + 1, endLine - 1, LocationRelativeToMethod.MethodInner, methodName);
+            _locationStore.AddLocationRelativeToMethod(endLine, LocationRelativeToMethod.MethodEnd, methodName);
             base.VisitConstructorDeclaration(node);
         }
 
@@ -60,10 +60,10 @@ namespace RoslynPlay
                 HierarchySmellsCount = SmellyClasses.Hierarchy.Count(a => a == className),
             };
 
-            _locationStore.AddClassLocation(startLine - 1, "class_description", visitedClass);
-            _locationStore.AddClassLocation(startLine, "class_start", visitedClass);
-            _locationStore.AddClassLocation(startLine + 1, endLine - 1, "class_inner", visitedClass);
-            _locationStore.AddClassLocation(endLine, "class_end", visitedClass);
+            _locationStore.AddLocationRelativeToClass(startLine - 1, LocationRelativeToClass.ClassDescription, visitedClass);
+            _locationStore.AddLocationRelativeToClass(startLine, LocationRelativeToClass.ClassStart, visitedClass);
+            _locationStore.AddLocationRelativeToClass(startLine + 1, endLine - 1, LocationRelativeToClass.ClassInner, visitedClass);
+            _locationStore.AddLocationRelativeToClass(endLine, LocationRelativeToClass.ClassEnd, visitedClass);
 
             _classStore.Classes.Add(visitedClass);
 
