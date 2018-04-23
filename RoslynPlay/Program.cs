@@ -8,13 +8,17 @@ namespace RoslynPlay
 {
     class Program
     {
-        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions-master";
-        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
-        static string smellsSheetPrefix = "GitExtensions";
+        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions-master";
+        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
+        //static string smellsSheetPrefix = "GitExtensions";
 
         //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
         //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
         //static string smellsSheetPrefix = "EFCore";
+
+        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/ScreenToGif-master";
+        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/Designite_GifRecorder.xls";
+        static string smellsSheetPrefix = "GifRecorder";
 
         static void Main(string[] args)
         {

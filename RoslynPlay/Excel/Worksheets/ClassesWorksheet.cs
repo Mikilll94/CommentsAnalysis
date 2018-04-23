@@ -27,13 +27,19 @@ namespace RoslynPlay
             worksheet.Cells[1, 6].Value = "Multi line comments count";
             worksheet.Cells[1, 7].Value = "Documentation comments count";
 
-            worksheet.Cells[1, 8].Value = "Class description";
-            worksheet.Cells[1, 9].Value = "Class start";
-            worksheet.Cells[1, 10].Value = "Class inner";
-            worksheet.Cells[1, 11].Value = "Class end";
+            worksheet.Cells[1, 8].Value = "Method description";
+            worksheet.Cells[1, 9].Value = "Method start";
+            worksheet.Cells[1, 10].Value = "Method inner";
+            worksheet.Cells[1, 11].Value = "Method end";
+
+            worksheet.Cells[1, 12].Value = "Abstraction smells count";
+            worksheet.Cells[1, 13].Value = "Encapsulation smells count";
+            worksheet.Cells[1, 14].Value = "Modularization smells count";
+            worksheet.Cells[1, 15].Value = "Hierarchy smells count";
 
             SetColumnsColor(worksheet, Color.Aqua, 5, 6, 7);
             SetColumnsColor(worksheet, Color.Chocolate, 8, 9, 10, 11);
+            SetColumnsColor(worksheet, Color.Gold, 12, 13, 14, 15);
         }
 
         protected override void WriteData(ExcelWorksheet worksheet)
@@ -60,22 +66,27 @@ namespace RoslynPlay
 
                 worksheet.Cells[i, 8].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassDescription);
+                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
                 worksheet.Cells[i, 9].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassStart);
+                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
                 worksheet.Cells[i, 10].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassInner);
+                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
                 worksheet.Cells[i, 11].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToClass == LocationRelativeToClass.ClassEnd);
+                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
+
+                worksheet.Cells[i, 12].Value = classes[i].AbstractionSmellsCount;
+                worksheet.Cells[i, 13].Value = classes[i].EncapsulationSmellsCount;
+                worksheet.Cells[i, 14].Value = classes[i].ModularizationSmellsCount;
+                worksheet.Cells[i, 15].Value = classes[i].HierarchySmellsCount;
             }
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)
         {
-            for (int i = 2; i <= 11; i++)
+            for (int i = 2; i <= 15; i++)
             {
                 worksheet.Column(i).AutoFit();
             }
