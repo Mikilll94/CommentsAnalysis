@@ -25,17 +25,18 @@ namespace RoslynPlay
 
             worksheet.Cells[1, 5].Value = "Single line comments count";
             worksheet.Cells[1, 6].Value = "Multi line comments count";
-            worksheet.Cells[1, 7].Value = "Documentation comments count";
+            worksheet.Cells[1, 7].Value = "Non-documentation comments count";
+            worksheet.Cells[1, 8].Value = "Documentation comments count";
 
-            worksheet.Cells[1, 8].Value = "Method description";
-            worksheet.Cells[1, 9].Value = "Method start";
-            worksheet.Cells[1, 10].Value = "Method inner";
-            worksheet.Cells[1, 11].Value = "Method end";
+            worksheet.Cells[1, 9].Value = "Method description";
+            worksheet.Cells[1, 10].Value = "Method start";
+            worksheet.Cells[1, 11].Value = "Method inner";
+            worksheet.Cells[1, 12].Value = "Method end";
 
-            worksheet.Cells[1, 12].Value = "Abstraction smells count";
-            worksheet.Cells[1, 13].Value = "Encapsulation smells count";
-            worksheet.Cells[1, 14].Value = "Modularization smells count";
-            worksheet.Cells[1, 15].Value = "Hierarchy smells count";
+            worksheet.Cells[1, 13].Value = "Abstraction smells count";
+            worksheet.Cells[1, 14].Value = "Encapsulation smells count";
+            worksheet.Cells[1, 15].Value = "Modularization smells count";
+            worksheet.Cells[1, 16].Value = "Hierarchy smells count";
 
             SetColumnsColor(worksheet, Color.Aqua, 5, 6, 7);
             SetColumnsColor(worksheet, Color.Chocolate, 8, 9, 10, 11);
@@ -54,33 +55,35 @@ namespace RoslynPlay
 
                 worksheet.Cells[i, 4].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName);
+
                 worksheet.Cells[i, 5].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
                         && c.Type == CommentType.SingleLine);
                 worksheet.Cells[i, 6].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
                         && c.Type == CommentType.MultiLine);
-                worksheet.Cells[i, 7].Value =
+                worksheet.Cells[i, 7].Value = int.Parse(worksheet.Cells[i, 5].Value.ToString()) + int.Parse(worksheet.Cells[i, 6].Value.ToString());
+                worksheet.Cells[i, 8].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
                         && c.Type == CommentType.Doc);
 
-                worksheet.Cells[i, 8].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
                 worksheet.Cells[i, 9].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
+                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
                 worksheet.Cells[i, 10].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
+                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
                 worksheet.Cells[i, 11].Value =
+                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
+                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
+                worksheet.Cells[i, 12].Value =
                     _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
                         && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
 
-                worksheet.Cells[i, 12].Value = classes[i].AbstractionSmellsCount;
-                worksheet.Cells[i, 13].Value = classes[i].EncapsulationSmellsCount;
-                worksheet.Cells[i, 14].Value = classes[i].ModularizationSmellsCount;
-                worksheet.Cells[i, 15].Value = classes[i].HierarchySmellsCount;
+                worksheet.Cells[i, 13].Value = classes[i].AbstractionSmellsCount;
+                worksheet.Cells[i, 14].Value = classes[i].EncapsulationSmellsCount;
+                worksheet.Cells[i, 15].Value = classes[i].ModularizationSmellsCount;
+                worksheet.Cells[i, 16].Value = classes[i].HierarchySmellsCount;
             }
         }
 
