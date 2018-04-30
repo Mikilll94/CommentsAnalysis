@@ -20,6 +20,9 @@ namespace RoslynPlay
             worksheet.Cells[1, 2].Value = "Class";
             worksheet.Cells[1, 3].Value = "Smells count";
             worksheet.Cells[1, 4].Value = "Comments count";
+
+            worksheet.Cells[1, 5].Value = "Non-documentation comments";
+            worksheet.Cells[1, 6].Value = "Documentation comments";
         }
 
         protected override void WriteData(ExcelWorksheet worksheet)
@@ -35,6 +38,15 @@ namespace RoslynPlay
                 worksheet.Cells[rowNo, 3].Value = @class.SmellsCount;
                 worksheet.Cells[rowNo, 4].Value =
                     _commentStore.Comments.Count(c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName);
+
+                worksheet.Cells[rowNo, 5].Value = int.Parse(_commentStore.Comments.Count(c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName
+                        && c.Type == CommentType.SingleLine).ToString())
+                        + int.Parse(_commentStore.Comments.Count(c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName
+                        && c.Type == CommentType.MultiLine).ToString());
+                worksheet.Cells[rowNo, 6].Value =
+                    _commentStore.Comments.Count(c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName
+                        && c.Type == CommentType.Doc);
+
                 rowNo++;
             }
         }

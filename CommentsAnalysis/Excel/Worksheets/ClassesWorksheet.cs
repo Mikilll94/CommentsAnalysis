@@ -38,9 +38,9 @@ namespace RoslynPlay
             worksheet.Cells[1, 15].Value = "Modularization smells count";
             worksheet.Cells[1, 16].Value = "Hierarchy smells count";
 
-            SetColumnsColor(worksheet, Color.Aqua, 5, 6, 7);
-            SetColumnsColor(worksheet, Color.Chocolate, 8, 9, 10, 11);
-            SetColumnsColor(worksheet, Color.Gold, 12, 13, 14, 15);
+            SetColumnsColor(worksheet, Color.Aqua, 5, 6, 7, 8);
+            SetColumnsColor(worksheet, Color.Chocolate, 9, 10, 11, 12);
+            SetColumnsColor(worksheet, Color.Gold, 13, 14, 15, 16);
         }
 
         protected override void WriteData(ExcelWorksheet worksheet)
