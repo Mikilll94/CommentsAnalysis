@@ -38,9 +38,9 @@ namespace RoslynPlay
             worksheet.Cells[1, 15].Value = "Modularization smells count";
             worksheet.Cells[1, 16].Value = "Hierarchy smells count";
 
-            SetColumnsColor(worksheet, Color.Aqua, 5, 6, 7, 8);
-            SetColumnsColor(worksheet, Color.Chocolate, 9, 10, 11, 12);
-            SetColumnsColor(worksheet, Color.Gold, 13, 14, 15, 16);
+            SetColumnsColor(worksheet, Color.LightGoldenrodYellow, 5, 6, 7, 8);
+            SetColumnsColor(worksheet, Color.LightGreen, 9, 10, 11, 12);
+            SetColumnsColor(worksheet, Color.LightBlue, 13, 14, 15, 16);
         }
 
         protected override void WriteData(ExcelWorksheet worksheet)
@@ -85,11 +85,13 @@ namespace RoslynPlay
                 worksheet.Cells[i, 15].Value = classes[i].ModularizationSmellsCount;
                 worksheet.Cells[i, 16].Value = classes[i].HierarchySmellsCount;
             }
+
+            worksheet.View.FreezePanes(2, 1);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)
         {
-            for (int i = 2; i <= 15; i++)
+            for (int i = 2; i <= 16; i++)
             {
                 worksheet.Column(i).AutoFit();
             }

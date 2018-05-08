@@ -16,7 +16,7 @@ namespace RoslynPlay
             worksheet.Cells[1, 1].Value = "File";
             worksheet.Cells[1, 2].Value = "Line";
             worksheet.Cells[1, 3].Value = "Type";
-            worksheet.Cells[1, 4].Value = "Words count";
+            worksheet.Cells[1, 4].Value = "Number of words";
             worksheet.Cells[1, 5].Value = "Has \"nothing\"";
             worksheet.Cells[1, 6].Value = "Has !";
             worksheet.Cells[1, 7].Value = "Has ?";
@@ -58,6 +58,8 @@ namespace RoslynPlay
 
                 rowNumber++;
             }
+
+            worksheet.View.FreezePanes(2, 1);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)

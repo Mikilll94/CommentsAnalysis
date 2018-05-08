@@ -49,11 +49,13 @@ namespace RoslynPlay
 
                 rowNo++;
             }
+
+            worksheet.View.FreezePanes(2, 1);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)
         {
-            for (int i = 1; i <= 4; i++)
+            for (int i = 2; i <= 6; i++)
             {
                 worksheet.Column(i).AutoFit();
             }
