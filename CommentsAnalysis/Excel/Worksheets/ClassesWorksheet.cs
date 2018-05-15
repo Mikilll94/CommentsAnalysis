@@ -85,8 +85,6 @@ namespace RoslynPlay
                 worksheet.Cells[i, 15].Value = classes[i].ModularizationSmellsCount;
                 worksheet.Cells[i, 16].Value = classes[i].HierarchySmellsCount;
             }
-
-            worksheet.View.FreezePanes(2, 1);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)
@@ -104,6 +102,11 @@ namespace RoslynPlay
                 worksheet.Column(column).Style.Fill.PatternType = ExcelFillStyle.Solid;
                 worksheet.Column(column).Style.Fill.BackgroundColor.SetColor(color);
             }
+        }
+
+        protected override void FreezePanes(ExcelWorksheet worksheet)
+        {
+            worksheet.View.FreezePanes(2, 1);
         }
     }
 }

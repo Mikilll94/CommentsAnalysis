@@ -69,5 +69,9 @@ namespace RoslynPlay
             worksheet.Cells[cells].Style.Border.Left.Style = ExcelBorderStyle.Thin;
             worksheet.Cells[cells].Style.Border.Right.Style = ExcelBorderStyle.Thin;
         }
+
+        protected override void FreezePanes(ExcelWorksheet worksheet)
+        {
+        }
     }
 }

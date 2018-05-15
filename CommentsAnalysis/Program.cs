@@ -10,19 +10,19 @@ namespace RoslynPlay
     {
         static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions";
         static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
-        static string smellsSheetPrefix = "GitExtensions";
+        static string solutionName = "GitExtensions";
 
         //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
         //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
-        //static string smellsSheetPrefix = "EFCore";
+        //static string solutionName = "EFCore";
 
         //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/ScreenToGif";
         //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/Designite_GifRecorder.xls";
-        //static string smellsSheetPrefix = "GifRecorder";
+        //static string solutionName = "GifRecorder";
 
         static void Main(string[] args)
         {
-            SmellyClasses smellyClasses = new SmellyClasses(smellsExcelPath, smellsSheetPrefix);
+            SmellyClasses smellyClasses = new SmellyClasses(smellsExcelPath, solutionName);
 
             string fileContent;
             SyntaxTree tree;
@@ -35,7 +35,6 @@ namespace RoslynPlay
 
             Console.WriteLine("Reading files...");
             ProgressBar progressBar = new ProgressBar(files.Length);
-
 
             foreach (var file in files)
             {
@@ -56,7 +55,7 @@ namespace RoslynPlay
 
             Console.WriteLine("\nCreating excel file...");
 
-            ExcelWriter excelWriter = new ExcelWriter($"{smellsSheetPrefix}_comments.xlsx");
+            ExcelWriter excelWriter = new ExcelWriter($"{solutionName}_comments.xlsx");
             excelWriter.Write(commentStore, classStore);
 
             Console.WriteLine("Finished");

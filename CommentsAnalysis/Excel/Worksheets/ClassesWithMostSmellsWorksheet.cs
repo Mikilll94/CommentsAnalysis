@@ -49,8 +49,6 @@ namespace RoslynPlay
 
                 rowNo++;
             }
-
-            worksheet.View.FreezePanes(2, 1);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)
@@ -59,6 +57,11 @@ namespace RoslynPlay
             {
                 worksheet.Column(i).AutoFit();
             }
+        }
+
+        protected override void FreezePanes(ExcelWorksheet worksheet)
+        {
+            worksheet.View.FreezePanes(2, 1);
         }
     }
 }

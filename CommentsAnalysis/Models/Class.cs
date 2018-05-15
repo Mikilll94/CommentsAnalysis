@@ -15,10 +15,5 @@
         public bool IsSmellyEncapsulation => EncapsulationSmellsCount > 0;
         public bool IsSmellyModularization => ModularizationSmellsCount > 0;
         public bool IsSmellyHierarchy => HierarchySmellsCount > 0;
-
-        public Class()
-        {
-
-        }
     }
 }

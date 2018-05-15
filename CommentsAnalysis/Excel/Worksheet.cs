@@ -17,10 +17,12 @@ namespace RoslynPlay
             WriteHeaders(worksheet);
             WriteData(worksheet);
             FitColumns(worksheet);
+            FreezePanes(worksheet);
         }
 
         protected virtual void WriteHeaders(ExcelWorksheet worksheet) {}
         protected virtual void WriteData(ExcelWorksheet worksheet) {}
         protected virtual void FitColumns(ExcelWorksheet worksheet) {}
+        protected virtual void FreezePanes(ExcelWorksheet worksheet) { }
     }
 }

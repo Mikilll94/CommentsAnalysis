@@ -17,10 +17,6 @@
         public Metrics Metrics { get; set; }
         public EvaluationBad Evaluation { get; set; }
 
-        public Comment()
-        {
-        }
-
         public abstract string GetLinesRange();
     }
 }
