@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
+﻿using CommentsAnalysis.Models;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Linq;
@@ -52,18 +53,19 @@ namespace RoslynPlay
             string name = node.Identifier.ToString();
             NamespaceDeclarationSyntax namespaceNode = node.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
             string @namespace = namespaceNode != null ? namespaceNode.Name.ToString() : "";
-            bool predicate(Class a) => a.Name == name && a.Namespace.Trim() == @namespace.Trim();
+
+            Func<Smell, bool> predicate = s => s.ClassName == name && s.ClassNamespace == @namespace;
 
             var visitedClass = new Class
             {
                 FileName = _fileName,
                 Namespace = @namespace,
                 Name = name,
-                SmellsCount = SmellyClasses.All.Count(predicate),
-                AbstractionSmellsCount = SmellyClasses.Abstraction.Count(predicate),
-                EncapsulationSmellsCount = SmellyClasses.Encapsulation.Count(predicate),
-                ModularizationSmellsCount = SmellyClasses.Modularization.Count(predicate),
-                HierarchySmellsCount = SmellyClasses.Hierarchy.Count(predicate),
+                SmellsCount = SmellsStore.Smells.Count(predicate),
+                AbstractionSmellsCount = SmellsStore.Smells.Where(s => s.Type == SmellType.Abstraction).Count(predicate),
+                EncapsulationSmellsCount = SmellsStore.Smells.Where(s => s.Type == SmellType.Encapsulation).Count(predicate),
+                ModularizationSmellsCount = SmellsStore.Smells.Where(s => s.Type == SmellType.Modularization).Count(predicate),
+                HierarchySmellsCount = SmellsStore.Smells.Where(s => s.Type == SmellType.Hierarchy).Count(predicate),
             };
 
             _locationStore.AddLocationRelativeToClass(startLine - 1, LocationRelativeToClass.ClassDescription, visitedClass);
@@ -71,7 +73,11 @@ namespace RoslynPlay
             _locationStore.AddLocationRelativeToClass(startLine + 1, endLine - 1, LocationRelativeToClass.ClassInner, visitedClass);
             _locationStore.AddLocationRelativeToClass(endLine, LocationRelativeToClass.ClassEnd, visitedClass);
 
-            _classStore.Classes.Add(visitedClass);
+            // Handle partial classes
+            if (!_classStore.Classes.Exists(c => c.Name == name && c.Namespace == @namespace))
+            {
+                _classStore.Classes.Add(visitedClass);
+            }
 
             base.VisitClassDeclaration(node);
         }
