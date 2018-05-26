@@ -6,13 +6,13 @@ using System.Text;
 
 namespace RoslynPlay
 {
-    class SmellyClasses
+    public class SmellyClasses
     {
-        public static List<string> All { get; set; } = new List<string>();
-        public static List<string> Abstraction { get; set; } = new List<string>();
-        public static List<string> Encapsulation { get; set; } = new List<string>();
-        public static List<string> Modularization { get; set; } = new List<string>();
-        public static List<string> Hierarchy { get; set; } = new List<string>();
+        public static List<Class> All { get; set; } = new List<Class>();
+        public static List<Class> Abstraction { get; set; } = new List<Class>();
+        public static List<Class> Encapsulation { get; set; } = new List<Class>();
+        public static List<Class> Modularization { get; set; } = new List<Class>();
+        public static List<Class> Hierarchy { get; set; } = new List<Class>();
 
         public SmellyClasses(string projectName, string sheetPrefix)
         {
@@ -23,7 +23,7 @@ namespace RoslynPlay
                 {
                     var result = reader.AsDataSet();
 
-                    Dictionary<string, List<string>> sheets = new Dictionary<string, List<string>>()
+                    Dictionary<string, List<Class>> sheets = new Dictionary<string, List<Class>>()
                     {
                         { "AbsSMells", Abstraction },
                         { "EncSMells", Encapsulation },
@@ -38,8 +38,10 @@ namespace RoslynPlay
                         for (int i = 0; i < rows.Count; i++)
                         {
                             string className = rows[i][2].ToString();
-                            All.Add(className);
-                            sheets[sheet].Add(className);
+                            string @namespace = rows[i][1].ToString();
+                            var @class = new Class() { Name = className, Namespace = @namespace };
+                            All.Add(@class);
+                            sheets[sheet].Add(@class);
                         }
                     }
                 }

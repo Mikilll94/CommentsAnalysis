@@ -7,10 +7,12 @@ namespace RoslynPlay
     class SummaryWorksheet : Worksheet
     {
         private CommentStore _commentStore;
+        private ClassStore _classStore;
 
-        public SummaryWorksheet(ExcelPackage package, CommentStore commentStore) : base(package)
+        public SummaryWorksheet(ExcelPackage package, CommentStore commentStore, ClassStore classStore) : base(package)
         {
             _commentStore = commentStore;
+            _classStore = classStore;
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)
@@ -30,6 +32,16 @@ namespace RoslynPlay
             worksheet.Cells[3, 6].Value = "Modularization";
             worksheet.Cells[3, 7].Value = "Hierarchy";
             worksheet.Cells[3, 8].Value = "Total";
+
+            worksheet.Cells["I3"].Value = "Doc comments";
+            worksheet.Cells["J3"].Value = "Non doc comments";
+
+            worksheet.Cells["A6"].Value = "Number of classes";
+            worksheet.Cells["B6"].Value = "Number of classes with code smells";
+            worksheet.Cells["C6"].Value = "Number of classes with abstraction code smells";
+            worksheet.Cells["D6"].Value = "Number of classes with encapsulation code smells";
+            worksheet.Cells["E6"].Value = "Number of classes with modularization code smells";
+            worksheet.Cells["F6"].Value = "Number of classes with hierarchy code smells";
 
             SetBorder(worksheet, "A1:H1");
             SetBorder(worksheet, "C2:H2");
@@ -51,6 +63,19 @@ namespace RoslynPlay
             worksheet.Cells[4, 6].Value = _commentStore.Comments.Count(c => c.Metrics.IsClassSmellyModularization == true);
             worksheet.Cells[4, 7].Value = _commentStore.Comments.Count(c => c.Metrics.IsClassSmellyHierarchy == true);
             worksheet.Cells[4, 8].Value = _commentStore.Comments.Count(c => c.Metrics.IsClassSmelly == true);
+
+            worksheet.Cells["I4"].Value = _commentStore.Comments.Count(c => c.Type == CommentType.Doc);
+            worksheet.Cells["J4"].Value = _commentStore.Comments.Count(c => c.Type == CommentType.SingleLine || c.Type == CommentType.MultiLine);
+
+            worksheet.Cells["J4"].Value = _commentStore.Comments.Count(c => c.Type == CommentType.SingleLine || c.Type == CommentType.MultiLine);
+            worksheet.Cells["J4"].Value = _commentStore.Comments.Count(c => c.Type == CommentType.SingleLine || c.Type == CommentType.MultiLine);
+
+            worksheet.Cells["A7"].Value = _classStore.Classes.Count();
+            worksheet.Cells["B7"].Value = _classStore.Classes.Count(c => c.IsSmelly);
+            worksheet.Cells["C7"].Value = _classStore.Classes.Count(c => c.IsSmellyAbstraction);
+            worksheet.Cells["D7"].Value = _classStore.Classes.Count(c => c.IsSmellyEncapsulation);
+            worksheet.Cells["E7"].Value = _classStore.Classes.Count(c => c.IsSmellyModularization);
+            worksheet.Cells["F7"].Value = _classStore.Classes.Count(c => c.IsSmellyHierarchy);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)

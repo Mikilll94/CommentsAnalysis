@@ -3,6 +3,7 @@
     public class Class
     {
         public string Name { get; set; }
+        public string Namespace { get; set; }
         public string FileName { get; set; }
         public int SmellsCount { get; set; }
         public int AbstractionSmellsCount { get; set; }

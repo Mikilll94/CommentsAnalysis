@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
 using System.Linq;
 
 namespace RoslynPlay
@@ -48,16 +49,21 @@ namespace RoslynPlay
             int startLine = node.GetLocation().GetLineSpan().StartLinePosition.Line + 1;
             int endLine = node.GetLocation().GetLineSpan().EndLinePosition.Line + 1;
 
-            string className = node.Identifier.ToString();
+            string name = node.Identifier.ToString();
+            NamespaceDeclarationSyntax namespaceNode = node.Ancestors().OfType<NamespaceDeclarationSyntax>().FirstOrDefault();
+            string @namespace = namespaceNode != null ? namespaceNode.Name.ToString() : "";
+            bool predicate(Class a) => a.Name == name && a.Namespace.Trim() == @namespace.Trim();
+
             var visitedClass = new Class
             {
                 FileName = _fileName,
-                Name = className,
-                SmellsCount = SmellyClasses.All.Count(a => a == className),
-                AbstractionSmellsCount = SmellyClasses.Abstraction.Count(a => a == className),
-                EncapsulationSmellsCount = SmellyClasses.Encapsulation.Count(a => a == className),
-                ModularizationSmellsCount = SmellyClasses.Modularization.Count(a => a == className),
-                HierarchySmellsCount = SmellyClasses.Hierarchy.Count(a => a == className),
+                Namespace = @namespace,
+                Name = name,
+                SmellsCount = SmellyClasses.All.Count(predicate),
+                AbstractionSmellsCount = SmellyClasses.Abstraction.Count(predicate),
+                EncapsulationSmellsCount = SmellyClasses.Encapsulation.Count(predicate),
+                ModularizationSmellsCount = SmellyClasses.Modularization.Count(predicate),
+                HierarchySmellsCount = SmellyClasses.Hierarchy.Count(predicate),
             };
 
             _locationStore.AddLocationRelativeToClass(startLine - 1, LocationRelativeToClass.ClassDescription, visitedClass);
