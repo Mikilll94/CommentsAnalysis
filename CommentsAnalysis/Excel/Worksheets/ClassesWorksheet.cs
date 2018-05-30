@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
@@ -55,32 +56,18 @@ namespace RoslynPlay
                 worksheet.Cells[i, 3].Value = classes[i].Name;
                 worksheet.Cells[i, 4].Value = classes[i].SmellsCount;
 
-                worksheet.Cells[i, 5].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName);
+                Func<Comment, bool> classPredicate = c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName;
 
-                worksheet.Cells[i, 6].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Type == CommentType.SingleLine);
-                worksheet.Cells[i, 7].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Type == CommentType.MultiLine);
-                worksheet.Cells[i, 8].Value = int.Parse(worksheet.Cells[i, 5].Value.ToString()) + int.Parse(worksheet.Cells[i, 6].Value.ToString());
-                worksheet.Cells[i, 9].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Type == CommentType.Doc);
+                worksheet.Cells[i, 5].Value = _commentStore.Comments.Where(classPredicate).Count();
+                worksheet.Cells[i, 6].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine);
+                worksheet.Cells[i, 7].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine);
+                worksheet.Cells[i, 8].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine) + _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine);
+                worksheet.Cells[i, 9].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc);
 
-                worksheet.Cells[i, 10].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
-                worksheet.Cells[i, 11].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
-                worksheet.Cells[i, 12].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
-                worksheet.Cells[i, 13].Value =
-                    _commentStore.Comments.Count(c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName
-                        && c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
+                worksheet.Cells[i, 10].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
+                worksheet.Cells[i, 11].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
+                worksheet.Cells[i, 12].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
+                worksheet.Cells[i, 13].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
 
                 worksheet.Cells[i, 14].Value = classes[i].AbstractionSmellsCount;
                 worksheet.Cells[i, 15].Value = classes[i].EncapsulationSmellsCount;

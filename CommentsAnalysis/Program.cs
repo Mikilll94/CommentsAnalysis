@@ -8,17 +8,17 @@ namespace RoslynPlay
 {
     class Program
     {
-        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions";
-        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
-        //static string solutionName = "GitExtensions";
+        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions";
+        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
+        static string solutionName = "GitExtensions";
 
         //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
         //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
         //static string solutionName = "EFCore";
 
-        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/ScreenToGif";
-        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/Designite_GifRecorder.xls";
-        static string solutionName = "GifRecorder";
+        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/ScreenToGif";
+        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/Designite_GifRecorder.xls";
+        //static string solutionName = "GifRecorder";
 
         static void Main(string[] args)
         {
