@@ -33,6 +33,12 @@ namespace RoslynPlay
 
             worksheet.Cells["H4"].Value = ">= 3 smells";
             worksheet.Cells["H5"].Value = "< 3 smells";
+
+            worksheet.Cells["I7"].Value = "P-value";
+            worksheet.Cells["I7:K7"].Merge = true;
+            worksheet.Cells["I8"].Value = "All";
+            worksheet.Cells["J8"].Value = "Non-doc";
+            worksheet.Cells["K8"].Value = "Doc";
         }
 
         protected override void WriteData(ExcelWorksheet worksheet)
@@ -92,6 +98,10 @@ namespace RoslynPlay
             worksheet.Cells["I5"].Value = Math.Round((double)commentsCountInCleanClasses / cleanClassesCount, 3);
             worksheet.Cells["J5"].Value = Math.Round((double)nonDocCommentsCountInCleanClasses / cleanClassesCount, 3);
             worksheet.Cells["K5"].Value = Math.Round((double)docCommentsCountInCleanClasses / cleanClassesCount, 3);
+
+            //worksheet.Cells["I8"].Formula = "TTEST(B2:B117;B118:B806;1,3)";
+            //worksheet.Cells["J8"].Value = Math.Round((double)nonDocCommentsCountInCleanClasses / cleanClassesCount, 3);
+            //worksheet.Cells["K8"].Value = Math.Round((double)docCommentsCountInCleanClasses / cleanClassesCount, 3);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using CommentsAnalysis.Utils;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -40,6 +42,19 @@ namespace RoslynPlay
             worksheet.Cells[1, 16].Value = "Modularization smells count";
             worksheet.Cells[1, 17].Value = "Hierarchy smells count";
 
+            worksheet.Cells["T2"].Value = "Correlation between smells count and ...";
+            worksheet.Cells["T2:V2"].Merge = true;
+            worksheet.Cells["T3"].Value = "Comments";
+            worksheet.Cells["U3"].Value = "Non-doc";
+            worksheet.Cells["V3"].Value = "Doc";
+
+            worksheet.Cells["T6"].Value = "Correlation between comments and ...";
+            worksheet.Cells["T6:W6"].Merge = true;
+            worksheet.Cells["T7"].Value = "Abstraction";
+            worksheet.Cells["U7"].Value = "Encapsulation";
+            worksheet.Cells["V7"].Value = "Modularization";
+            worksheet.Cells["W7"].Value = "Hierarchy";
+
             SetColumnsColor(worksheet, Color.LightGoldenrodYellow, 6, 7, 8, 9);
             SetColumnsColor(worksheet, Color.LightGreen, 10, 11, 12, 13);
             SetColumnsColor(worksheet, Color.LightBlue, 14, 15, 16, 17);
@@ -49,36 +64,66 @@ namespace RoslynPlay
         {
             Class[] classes = _classStore.Classes.ToArray();
 
-            for (int i = 2; i < classes.Length; i++)
+            List<double> smellsCountList = new List<double>();
+            List<double> commentsCountList = new List<double>();
+            List<double> nonDocCommentsCountList = new List<double>();
+            List<double> docCommentsCountList = new List<double>();
+
+            int rowNumber = 2;
+
+            foreach (var @class in classes)
             {
-                worksheet.Cells[i, 1].Value = classes[i].FileName;
-                worksheet.Cells[i, 2].Value = classes[i].Namespace;
-                worksheet.Cells[i, 3].Value = classes[i].Name;
-                worksheet.Cells[i, 4].Value = classes[i].SmellsCount;
+                worksheet.Cells[rowNumber, 1].Value = @class.FileName;
+                worksheet.Cells[rowNumber, 2].Value = @class.Namespace;
+                worksheet.Cells[rowNumber, 3].Value = @class.Name;
+                worksheet.Cells[rowNumber, 4].Value = @class.SmellsCount;
 
-                Func<Comment, bool> classPredicate = c => classes[i].Name == c.Metrics.ClassName && classes[i].FileName == c.FileName;
+                Func<Comment, bool> classPredicate = c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName;
 
-                worksheet.Cells[i, 5].Value = _commentStore.Comments.Where(classPredicate).Count();
-                worksheet.Cells[i, 6].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine);
-                worksheet.Cells[i, 7].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine);
-                worksheet.Cells[i, 8].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine) + _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine);
-                worksheet.Cells[i, 9].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc);
+                worksheet.Cells[rowNumber, 5].Value = _commentStore.Comments.Where(classPredicate).Count();
+                worksheet.Cells[rowNumber, 6].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine);
+                worksheet.Cells[rowNumber, 7].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine);
 
-                worksheet.Cells[i, 10].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
-                worksheet.Cells[i, 11].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
-                worksheet.Cells[i, 12].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
-                worksheet.Cells[i, 13].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
+                int nonDocCommentsCount = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine) + _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine);
+                worksheet.Cells[rowNumber, 8].Value = nonDocCommentsCount;
 
-                worksheet.Cells[i, 14].Value = classes[i].AbstractionSmellsCount;
-                worksheet.Cells[i, 15].Value = classes[i].EncapsulationSmellsCount;
-                worksheet.Cells[i, 16].Value = classes[i].ModularizationSmellsCount;
-                worksheet.Cells[i, 17].Value = classes[i].HierarchySmellsCount;
+                worksheet.Cells[rowNumber, 9].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc);
+
+                worksheet.Cells[rowNumber, 10].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
+                worksheet.Cells[rowNumber, 11].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
+                worksheet.Cells[rowNumber, 12].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
+                worksheet.Cells[rowNumber, 13].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
+
+                worksheet.Cells[rowNumber, 14].Value = @class.AbstractionSmellsCount;
+                worksheet.Cells[rowNumber, 15].Value = @class.EncapsulationSmellsCount;
+                worksheet.Cells[rowNumber, 16].Value = @class.ModularizationSmellsCount;
+                worksheet.Cells[rowNumber, 17].Value = @class.HierarchySmellsCount;
+
+                smellsCountList.Add(@class.SmellsCount);
+                commentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count());
+                nonDocCommentsCountList.Add(nonDocCommentsCount);
+                docCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc));
+
+                rowNumber++;
             }
+
+            worksheet.Cells["T4"].Value = Math.Round(PearsonCorrelation.Compute(smellsCountList, commentsCountList), 3);
+            worksheet.Cells["U4"].Value = Math.Round(PearsonCorrelation.Compute(smellsCountList, nonDocCommentsCountList), 3);
+            worksheet.Cells["V4"].Value = Math.Round(PearsonCorrelation.Compute(smellsCountList, docCommentsCountList), 3);
+
+            worksheet.Cells["T8"].Value = Math.Round(PearsonCorrelation.Compute(commentsCountList, classes.Select(c => (double)c.AbstractionSmellsCount).ToList()), 3);
+            worksheet.Cells["U8"].Value = Math.Round(PearsonCorrelation.Compute(commentsCountList, classes.Select(c => (double)c.EncapsulationSmellsCount).ToList()), 3);
+            worksheet.Cells["V8"].Value = Math.Round(PearsonCorrelation.Compute(commentsCountList, classes.Select(c => (double)c.ModularizationSmellsCount).ToList()), 3);
+            worksheet.Cells["W8"].Value = Math.Round(PearsonCorrelation.Compute(commentsCountList, classes.Select(c => (double)c.HierarchySmellsCount).ToList()), 3);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)
         {
-            for (int i = 3; i <= 17; i++)
+            for (int i = 4; i <= 17; i++)
+            {
+                worksheet.Column(i).AutoFit();
+            }
+            for (int i = 20; i <= 22; i++)
             {
                 worksheet.Column(i).AutoFit();
             }
