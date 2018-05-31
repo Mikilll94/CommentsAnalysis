@@ -8,28 +8,28 @@ namespace RoslynPlay
 {
     class Program
     {
-        static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/gitextensions";
-        static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/gitextensions/Designite_GitExtensions.xls";
+        static string folderName = "gitextensions";
+        static string designiteFileName = "Designite_GitExtensions.xls";
         static string solutionName = "GitExtensions";
 
-        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/EntityFrameworkCore";
-        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/EntityFrameworkCore/Designite_EFCore.xls";
+        //static string folderName = "EntityFrameworkCore";
+        //static string designiteFileName = "Designite_EFCore.xls";
         //static string solutionName = "EFCore";
 
-        //static string projectPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/ScreenToGif";
-        //static string smellsExcelPath = "c:/Users/wasni/Desktop/comments_analysis_data/ScreenToGif/Designite_GifRecorder.xls";
+        //static string folderName = "ScreenToGif";
+        //static string designiteFileName = "Designite_GifRecorder.xls";
         //static string solutionName = "GifRecorder";
 
         static void Main(string[] args)
         {
-            SmellsStore.Initialize(smellsExcelPath, solutionName);
+            SmellsStore.Initialize($@"../../../../DesigniteResults/{designiteFileName}", solutionName);
 
             string fileContent;
             SyntaxTree tree;
             SyntaxNode root;
             CommentsWalker commentWalker;
             MethodsAndClassesWalker methodWalker;
-            string[] files = Directory.GetFiles(projectPath, $"*.cs", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles($@"../../../../Projects/{folderName}", $"*.cs", SearchOption.AllDirectories);
             var commentStore = new CommentStore();
             var classStore = new ClassStore();
 
@@ -41,10 +41,11 @@ namespace RoslynPlay
                 fileContent = File.ReadAllText(file);
                 fileContent = TransformSingleLineComments(fileContent);
 
-                string filePath = new Regex($@"{projectPath}\\(.*)$").Match(file).Groups[1].ToString();
                 tree = CSharpSyntaxTree.ParseText(fileContent);
                 root = tree.GetRoot();
                 var locationStore = new LocationStore();
+                string filePath = new Regex($@"{folderName}\\(.*)").Match(file).Groups[1].ToString();
+
                 methodWalker = new MethodsAndClassesWalker(filePath, locationStore, classStore);
                 methodWalker.Visit(root);
                 commentWalker = new CommentsWalker(filePath, locationStore, commentStore);
