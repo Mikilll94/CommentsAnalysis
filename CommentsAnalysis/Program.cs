@@ -4,21 +4,21 @@ using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     class Program
     {
-        static string folderName = "gitextensions";
-        static string designiteFileName = "Designite_GitExtensions.xls";
-        static string solutionName = "GitExtensions";
+        //static string folderName = "gitextensions";
+        //static string designiteFileName = "Designite_GitExtensions.xls";
+        //static string solutionName = "GitExtensions";
 
         //static string folderName = "EntityFrameworkCore";
         //static string designiteFileName = "Designite_EFCore.xls";
         //static string solutionName = "EFCore";
 
-        //static string folderName = "ScreenToGif";
-        //static string designiteFileName = "Designite_GifRecorder.xls";
-        //static string solutionName = "GifRecorder";
+        static string folderName = "ScreenToGif";
+        static string designiteFileName = "Designite_GifRecorder.xls";
+        static string solutionName = "GifRecorder";
 
         static void Main(string[] args)
         {

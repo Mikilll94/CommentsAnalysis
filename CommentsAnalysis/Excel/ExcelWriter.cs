@@ -3,9 +3,9 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
-    class ExcelWriter
+    public class ExcelWriter
     {
         private FileInfo _file;
 

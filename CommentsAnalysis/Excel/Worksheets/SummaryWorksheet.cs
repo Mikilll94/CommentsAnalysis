@@ -2,7 +2,7 @@
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     class SummaryWorksheet : Worksheet
     {

@@ -6,7 +6,7 @@ using CommentsAnalysis.Utils;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     class ClassesWorksheet : Worksheet
     {
@@ -42,7 +42,7 @@ namespace RoslynPlay
             worksheet.Cells[1, 16].Value = "Modularization smells count";
             worksheet.Cells[1, 17].Value = "Hierarchy smells count";
 
-            worksheet.Cells["T2"].Value = "Correlation between smells count and ...";
+            worksheet.Cells["T2"].Value = "Correlation between number of smells and ...";
             worksheet.Cells["T2:V2"].Merge = true;
             worksheet.Cells["T3"].Value = "Comments";
             worksheet.Cells["U3"].Value = "Non-doc";
@@ -55,6 +55,19 @@ namespace RoslynPlay
             worksheet.Cells["V7"].Value = "Modularization";
             worksheet.Cells["W7"].Value = "Hierarchy";
 
+            worksheet.Cells["T10"].Value = "Correlation between number of smells and ...";
+            worksheet.Cells["T10:W10"].Merge = true;
+            worksheet.Cells["T11"].Value = "Bad comments";
+            worksheet.Cells["U11"].Value = "Bad non-doc";
+            worksheet.Cells["V11"].Value = "Bad doc";
+
+            worksheet.Cells["T14"].Value = "Correlation between bad comments and ...";
+            worksheet.Cells["T14:W14"].Merge = true;
+            worksheet.Cells["T15"].Value = "Abstraction";
+            worksheet.Cells["U15"].Value = "Encapsulation";
+            worksheet.Cells["V15"].Value = "Modularization";
+            worksheet.Cells["W15"].Value = "Hierarchy";
+
             SetColumnsColor(worksheet, Color.LightGoldenrodYellow, 6, 7, 8, 9);
             SetColumnsColor(worksheet, Color.LightGreen, 10, 11, 12, 13);
             SetColumnsColor(worksheet, Color.LightBlue, 14, 15, 16, 17);
@@ -65,9 +78,14 @@ namespace RoslynPlay
             Class[] classes = _classStore.Classes.ToArray();
 
             List<double> smellsCountList = new List<double>();
+
             List<double> commentsCountList = new List<double>();
             List<double> nonDocCommentsCountList = new List<double>();
             List<double> docCommentsCountList = new List<double>();
+
+            List<double> badCommentsCountList = new List<double>();
+            List<double> badNonDocCommentsCountList = new List<double>();
+            List<double> badDocCommentsCountList = new List<double>();
 
             int rowNumber = 2;
 
@@ -100,9 +118,15 @@ namespace RoslynPlay
                 worksheet.Cells[rowNumber, 17].Value = @class.HierarchySmellsCount;
 
                 smellsCountList.Add(@class.SmellsCount);
+
                 commentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count());
                 nonDocCommentsCountList.Add(nonDocCommentsCount);
                 docCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc));
+
+                badCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true));
+                badNonDocCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine && c.Evaluation.IsBad() == true)
+                    + _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine && c.Evaluation.IsBad() == true));
+                badDocCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc && c.Evaluation.IsBad() == true));
 
                 rowNumber++;
             }
@@ -115,6 +139,15 @@ namespace RoslynPlay
             worksheet.Cells["U8"].Value = Math.Round(PearsonCorrelation.Compute(commentsCountList, classes.Select(c => (double)c.EncapsulationSmellsCount).ToList()), 3);
             worksheet.Cells["V8"].Value = Math.Round(PearsonCorrelation.Compute(commentsCountList, classes.Select(c => (double)c.ModularizationSmellsCount).ToList()), 3);
             worksheet.Cells["W8"].Value = Math.Round(PearsonCorrelation.Compute(commentsCountList, classes.Select(c => (double)c.HierarchySmellsCount).ToList()), 3);
+
+            worksheet.Cells["T12"].Value = Math.Round(PearsonCorrelation.Compute(smellsCountList, badCommentsCountList), 3);
+            worksheet.Cells["U12"].Value = Math.Round(PearsonCorrelation.Compute(smellsCountList, badNonDocCommentsCountList), 3);
+            worksheet.Cells["V12"].Value = Math.Round(PearsonCorrelation.Compute(smellsCountList, badDocCommentsCountList), 3);
+
+            worksheet.Cells["T16"].Value = Math.Round(PearsonCorrelation.Compute(badCommentsCountList, classes.Select(c => (double)c.AbstractionSmellsCount).ToList()), 3);
+            worksheet.Cells["U16"].Value = Math.Round(PearsonCorrelation.Compute(badCommentsCountList, classes.Select(c => (double)c.EncapsulationSmellsCount).ToList()), 3);
+            worksheet.Cells["V16"].Value = Math.Round(PearsonCorrelation.Compute(badCommentsCountList, classes.Select(c => (double)c.ModularizationSmellsCount).ToList()), 3);
+            worksheet.Cells["W16"].Value = Math.Round(PearsonCorrelation.Compute(badCommentsCountList, classes.Select(c => (double)c.HierarchySmellsCount).ToList()), 3);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)

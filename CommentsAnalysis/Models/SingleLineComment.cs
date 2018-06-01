@@ -1,4 +1,4 @@
-﻿namespace RoslynPlay
+﻿namespace CommentsAnalysis
 {
     class SingleLineComment : Comment
     {

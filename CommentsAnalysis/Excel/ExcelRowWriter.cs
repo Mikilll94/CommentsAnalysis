@@ -2,7 +2,7 @@
 using OfficeOpenXml.Style;
 using System.Drawing;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     public class ExcelRowWriter
     {

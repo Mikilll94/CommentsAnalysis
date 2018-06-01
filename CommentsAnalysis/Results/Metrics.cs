@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     public class Metrics
     {
@@ -54,7 +54,7 @@ namespace RoslynPlay
 
             if (MethodName != null && LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription)
             {
-                CoherenceCoefficient = RoslynPlay.CoherenceCoefficient.Compute(content, MethodName);
+                CoherenceCoefficient = CommentsAnalysis.CoherenceCoefficient.Compute(content, MethodName);
             }
         }
 

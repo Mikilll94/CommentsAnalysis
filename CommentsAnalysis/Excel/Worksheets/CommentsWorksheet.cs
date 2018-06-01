@@ -1,6 +1,6 @@
 ﻿using OfficeOpenXml;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     class CommentsWorksheet : Worksheet
     {

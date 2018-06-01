@@ -2,7 +2,7 @@
 using System.Linq;
 using OfficeOpenXml;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     public class ClassesWithMostSmellsWorksheet : Worksheet
     {

@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Linq;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     class MethodsAndClassesWalker : CSharpSyntaxWalker
     {

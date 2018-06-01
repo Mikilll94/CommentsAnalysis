@@ -6,7 +6,7 @@ using System.Data;
 using System.IO;
 using System.Text;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     public class SmellsStore
     {

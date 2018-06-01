@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
 
-namespace RoslynPlay
+namespace CommentsAnalysis
 {
     public static class CodeDetector
     {
