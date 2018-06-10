@@ -27,8 +27,6 @@ namespace CommentsAnalysis
                 Console.WriteLine("Generated classes with most smells worksheet");
                 new ClassesWithMostComments(package, commentStore, classStore).Create("ClassesWithMostComments");
                 Console.WriteLine("Generated classes with most comments worksheet");
-                new SummaryWorksheet(package, commentStore, classStore).Create("Summary");
-                Console.WriteLine("Generated summary worksheet");
 
                 package.Save();
             }

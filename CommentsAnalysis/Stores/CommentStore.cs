@@ -10,37 +10,42 @@ namespace CommentsAnalysis
         public List<Comment> Comments { get; } = new List<Comment>();
 
         public void AddCommentTrivia(SyntaxTrivia trivia,
-            LocationStore commentLocationstore, string fileName)
+            LocationStore commentLocationstore, ClassStore classStore, string fileName)
         {
             if (trivia.Kind() == SyntaxKind.SingleLineCommentTrivia)
             {
-                Comments.Add(new SingleLineComment(trivia.ToString(),
-                    trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1, commentLocationstore)
+                Comment comment = new SingleLineComment(trivia.ToString(),
+                    trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1)
                 {
                     FileName = fileName,
-                });
+                };
+                comment.Initialize(commentLocationstore, classStore);
+                Comments.Add(comment);
             }
             else if (trivia.Kind() == SyntaxKind.MultiLineCommentTrivia)
             {
-                Comments.Add(new MultiLineComment(trivia.ToString(),
+                Comment comment = new MultiLineComment(trivia.ToString(),
                     trivia.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
-                    trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1, commentLocationstore)
+                    trivia.GetLocation().GetLineSpan().EndLinePosition.Line + 1)
                 {
                     FileName = fileName,
-                });
+                };
+                comment.Initialize(commentLocationstore, classStore);
+                Comments.Add(comment);
             }
         }
 
         public void AddCommentNode(DocumentationCommentTriviaSyntax node,
-            LocationStore commentLocationstore, string fileName)
+            LocationStore commentLocationstore, ClassStore classStore, string fileName)
         {
-            Comments.Add(new DocComment(node.ToString(),
+            Comment comment = new DocComment(node.ToString(),
                 node.GetLocation().GetLineSpan().StartLinePosition.Line + 1,
-                node.GetLocation().GetLineSpan().EndLinePosition.Line,
-                commentLocationstore)
+                node.GetLocation().GetLineSpan().EndLinePosition.Line)
             {
                 FileName = fileName,
-            });
+            };
+            comment.Initialize(commentLocationstore, classStore);
+            Comments.Add(comment);
         }
     }
 }

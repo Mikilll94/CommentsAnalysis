@@ -67,7 +67,7 @@ namespace CommentsAnalysis
                 worksheet.Cells[rowNo, 2].Value = @class.Name;
                 worksheet.Cells[rowNo, 3].Value = @class.SmellsCount;
 
-                Func<Comment, bool> classPredicate = c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName;
+                Func<Comment, bool> classPredicate = c => @class.Name == c.Class?.Name && @class.FileName == c.FileName;
 
                 worksheet.Cells[rowNo, 4].Value = _commentStore.Comments.Where(classPredicate).Count();
 
@@ -77,10 +77,10 @@ namespace CommentsAnalysis
 
                 worksheet.Cells[rowNo, 6].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc);
 
-                worksheet.Cells[rowNo, 7].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true);
-                worksheet.Cells[rowNo, 8].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true
+                worksheet.Cells[rowNo, 7].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.IsBad() == true);
+                worksheet.Cells[rowNo, 8].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.IsBad() == true
                     && (c.Type == CommentType.SingleLine || c.Type == CommentType.MultiLine));
-                worksheet.Cells[rowNo, 9].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true
+                worksheet.Cells[rowNo, 9].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.IsBad() == true
                     && c.Type == CommentType.Doc);
 
                 if (@class.SmellsCount >= 3)

@@ -4,15 +4,13 @@ namespace CommentsAnalysis
 {
     class DocComment : Comment
     {
-        public DocComment(string content, int lineStart, int lineEnd, LocationStore commentLocationstore)
+        public DocComment(string content, int lineStart, int lineEnd)
         {
             Content = Regex.Replace(content, @"(\/\/\/)", "");
             Content = Regex.Replace(Content, "(<.*?>)", "");
             Type = CommentType.Doc;
             LineStart = lineStart;
             LineEnd = lineEnd;
-            Metrics = new Metrics(Content, lineEnd, Type, commentLocationstore);
-            Evaluation = new EvaluationBad(Metrics);
         }
 
         public override string GetLinesRange()

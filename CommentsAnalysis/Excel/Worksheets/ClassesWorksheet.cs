@@ -96,7 +96,7 @@ namespace CommentsAnalysis
                 worksheet.Cells[rowNumber, 3].Value = @class.Name;
                 worksheet.Cells[rowNumber, 4].Value = @class.SmellsCount;
 
-                Func<Comment, bool> classPredicate = c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName;
+                Func<Comment, bool> classPredicate = c => @class.Name == c.Class?.Name && @class.FileName == c.FileName;
 
                 worksheet.Cells[rowNumber, 5].Value = _commentStore.Comments.Where(classPredicate).Count();
                 worksheet.Cells[rowNumber, 6].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine);
@@ -107,10 +107,10 @@ namespace CommentsAnalysis
 
                 worksheet.Cells[rowNumber, 9].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc);
 
-                worksheet.Cells[rowNumber, 10].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
-                worksheet.Cells[rowNumber, 11].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
-                worksheet.Cells[rowNumber, 12].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
-                worksheet.Cells[rowNumber, 13].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Metrics.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
+                worksheet.Cells[rowNumber, 10].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.LocationRelativeToMethod == LocationRelativeToMethod.MethodDescription);
+                worksheet.Cells[rowNumber, 11].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.LocationRelativeToMethod == LocationRelativeToMethod.MethodStart);
+                worksheet.Cells[rowNumber, 12].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.LocationRelativeToMethod == LocationRelativeToMethod.MethodInner);
+                worksheet.Cells[rowNumber, 13].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.LocationRelativeToMethod == LocationRelativeToMethod.MethodEnd);
 
                 worksheet.Cells[rowNumber, 14].Value = @class.AbstractionSmellsCount;
                 worksheet.Cells[rowNumber, 15].Value = @class.EncapsulationSmellsCount;
@@ -123,10 +123,10 @@ namespace CommentsAnalysis
                 nonDocCommentsCountList.Add(nonDocCommentsCount);
                 docCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc));
 
-                badCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true));
-                badNonDocCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine && c.Evaluation.IsBad() == true)
-                    + _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine && c.Evaluation.IsBad() == true));
-                badDocCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc && c.Evaluation.IsBad() == true));
+                badCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.IsBad() == true));
+                badNonDocCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.SingleLine && c.IsBad() == true)
+                    + _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.MultiLine && c.IsBad() == true));
+                badDocCommentsCountList.Add(_commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc && c.IsBad() == true));
 
                 rowNumber++;
             }

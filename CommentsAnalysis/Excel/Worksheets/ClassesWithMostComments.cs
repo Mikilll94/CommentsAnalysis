@@ -43,7 +43,7 @@ namespace CommentsAnalysis
         protected override void WriteData(ExcelWorksheet worksheet)
         {
             Class[] classes = _classStore.Classes.OrderByDescending(@class => 
-                _commentStore.Comments.Count(c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName)).ToArray();
+                _commentStore.Comments.Count(c => @class.Name == c.Class?.Name && @class.FileName == c.FileName)).ToArray();
 
             List<Class> classesWithMostComments = new List<Class>();
             List<Class> restOfClasses = new List<Class>();
@@ -52,7 +52,7 @@ namespace CommentsAnalysis
 
             foreach (var @class in classes)
             {
-                int commentsCount = _commentStore.Comments.Count(c => @class.Name == c.Metrics.ClassName && @class.FileName == c.FileName);
+                int commentsCount = _commentStore.Comments.Count(c => @class.Name == c.Class?.Name && @class.FileName == c.FileName);
 
                 worksheet.Cells[rowNo, 1].Value = @class.FileName;
                 worksheet.Cells[rowNo, 2].Value = @class.Name;
