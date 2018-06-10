@@ -25,20 +25,24 @@ namespace CommentsAnalysis
             worksheet.Cells[1, 5].Value = "Non-documentation comments";
             worksheet.Cells[1, 6].Value = "Documentation comments";
 
-            worksheet.Cells["I2"].Value = "Average number of comments";
-            worksheet.Cells["I2:K2"].Merge = true;
-            worksheet.Cells["I3"].Value = "All";
-            worksheet.Cells["J3"].Value = "Non-doc";
-            worksheet.Cells["K3"].Value = "Doc";
+            worksheet.Cells[1, 7].Value = "Bad comments count";
+            worksheet.Cells[1, 8].Value = "Bad non-documentation comments count";
+            worksheet.Cells[1, 9].Value = "Bad documentation comments count";
 
-            worksheet.Cells["H4"].Value = ">= 3 smells";
-            worksheet.Cells["H5"].Value = "< 3 smells";
+            worksheet.Cells["M2"].Value = "Average number of comments";
+            worksheet.Cells["M2:O2"].Merge = true;
+            worksheet.Cells["M3"].Value = "All";
+            worksheet.Cells["N3"].Value = "Non-doc";
+            worksheet.Cells["O3"].Value = "Doc";
 
-            worksheet.Cells["I7"].Value = "P-value";
-            worksheet.Cells["I7:K7"].Merge = true;
-            worksheet.Cells["I8"].Value = "All";
-            worksheet.Cells["J8"].Value = "Non-doc";
-            worksheet.Cells["K8"].Value = "Doc";
+            worksheet.Cells["L4"].Value = ">= 3 smells";
+            worksheet.Cells["L5"].Value = "< 3 smells";
+
+            worksheet.Cells["L7"].Value = "P-value";
+            worksheet.Cells["L7:O7"].Merge = true;
+            worksheet.Cells["M8"].Value = "All";
+            worksheet.Cells["N8"].Value = "Non-doc";
+            worksheet.Cells["O8"].Value = "Doc";
         }
 
         protected override void WriteData(ExcelWorksheet worksheet)
@@ -73,6 +77,12 @@ namespace CommentsAnalysis
 
                 worksheet.Cells[rowNo, 6].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Type == CommentType.Doc);
 
+                worksheet.Cells[rowNo, 7].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true);
+                worksheet.Cells[rowNo, 8].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true
+                    && (c.Type == CommentType.SingleLine || c.Type == CommentType.MultiLine));
+                worksheet.Cells[rowNo, 9].Value = _commentStore.Comments.Where(classPredicate).Count(c => c.Evaluation.IsBad() == true
+                    && c.Type == CommentType.Doc);
+
                 if (@class.SmellsCount >= 3)
                 {
                     commentsCountInSmellyClasses += _commentStore.Comments.Where(classPredicate).Count();
@@ -91,13 +101,13 @@ namespace CommentsAnalysis
                 rowNo++;
             }
 
-            worksheet.Cells["I4"].Value = Math.Round((double)commentsCountInSmellyClasses / smellyClassesCount,3);
-            worksheet.Cells["J4"].Value = Math.Round((double)nonDocCommentsCountInSmellyClasses / smellyClassesCount, 3);
-            worksheet.Cells["K4"].Value = Math.Round((double)docCommentsCountInSmellyClasses / smellyClassesCount, 3);
+            worksheet.Cells["M4"].Value = Math.Round((double)commentsCountInSmellyClasses / smellyClassesCount,3);
+            worksheet.Cells["N4"].Value = Math.Round((double)nonDocCommentsCountInSmellyClasses / smellyClassesCount, 3);
+            worksheet.Cells["O4"].Value = Math.Round((double)docCommentsCountInSmellyClasses / smellyClassesCount, 3);
 
-            worksheet.Cells["I5"].Value = Math.Round((double)commentsCountInCleanClasses / cleanClassesCount, 3);
-            worksheet.Cells["J5"].Value = Math.Round((double)nonDocCommentsCountInCleanClasses / cleanClassesCount, 3);
-            worksheet.Cells["K5"].Value = Math.Round((double)docCommentsCountInCleanClasses / cleanClassesCount, 3);
+            worksheet.Cells["M5"].Value = Math.Round((double)commentsCountInCleanClasses / cleanClassesCount, 3);
+            worksheet.Cells["N5"].Value = Math.Round((double)nonDocCommentsCountInCleanClasses / cleanClassesCount, 3);
+            worksheet.Cells["O5"].Value = Math.Round((double)docCommentsCountInCleanClasses / cleanClassesCount, 3);
 
             //worksheet.Cells["I8"].Formula = "TTEST(B2:B117;B118:B806;1,3)";
             //worksheet.Cells["J8"].Value = Math.Round((double)nonDocCommentsCountInCleanClasses / cleanClassesCount, 3);
@@ -106,7 +116,7 @@ namespace CommentsAnalysis
 
         protected override void FitColumns(ExcelWorksheet worksheet)
         {
-            for (int i = 2; i <= 6; i++)
+            for (int i = 2; i <= 9; i++)
             {
                 worksheet.Column(i).AutoFit();
             }
