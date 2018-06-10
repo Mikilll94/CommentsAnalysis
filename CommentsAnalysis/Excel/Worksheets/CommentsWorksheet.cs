@@ -52,7 +52,7 @@ namespace CommentsAnalysis
                 excelRowWriter.WriteCell(11, comment.MethodName);
                 excelRowWriter.WriteCell(12, comment.LocationRelativeToClass);
                 excelRowWriter.WriteCell(13, comment.Class?.Name);
-                excelRowWriter.WriteCell(14, comment.Class?.IsSmelly, comment.Class?.IsSmelly);
+                excelRowWriter.WriteCell(14, comment.Class?.IsSmelly(), comment.Class?.IsSmelly());
                 excelRowWriter.WriteCell(15, comment.IsBad(), comment.IsBad());
                 excelRowWriter.WriteCell(16, comment.Content);
 

@@ -1,4 +1,6 @@
-﻿namespace CommentsAnalysis
+﻿using System.Collections.Generic;
+
+namespace CommentsAnalysis
 {
     public class Class
     {
@@ -10,11 +12,12 @@
         public int EncapsulationSmellsCount { get; set; }
         public int ModularizationSmellsCount { get; set; }
         public int HierarchySmellsCount { get; set; }
+        public List<Comment> Comments { get; set; } = new List<Comment>();
 
-        public bool IsSmelly => SmellsCount > 0;
-        public bool IsSmellyAbstraction => AbstractionSmellsCount > 0;
-        public bool IsSmellyEncapsulation => EncapsulationSmellsCount > 0;
-        public bool IsSmellyModularization => ModularizationSmellsCount > 0;
-        public bool IsSmellyHierarchy => HierarchySmellsCount > 0;
+        public bool IsSmelly() => SmellsCount > 0;
+        public bool IsSmellyAbstraction() => AbstractionSmellsCount > 0;
+        public bool IsSmellyEncapsulation() => EncapsulationSmellsCount > 0;
+        public bool IsSmellyModularization() => ModularizationSmellsCount > 0;
+        public bool IsSmellyHierarchy() => HierarchySmellsCount > 0;
     }
 }

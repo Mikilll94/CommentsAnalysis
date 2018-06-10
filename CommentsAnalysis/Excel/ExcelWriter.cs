@@ -21,7 +21,7 @@ namespace CommentsAnalysis
             {
                 new CommentsWorksheet(package, commentStore).Create("Comments");
                 Console.WriteLine("Generated comments worksheet");
-                new ClassesWorksheet(package, commentStore, classStore).Create("Classes");
+                new ClassesWorksheet(package, classStore).Create("Classes");
                 Console.WriteLine("Generated classes worksheet");
                 new ClassesWithMostSmellsWorksheet(package, commentStore, classStore).Create("ClassesWithMostSmells");
                 Console.WriteLine("Generated classes with most smells worksheet");

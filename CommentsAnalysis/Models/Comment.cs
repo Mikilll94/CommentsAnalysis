@@ -56,6 +56,7 @@ namespace CommentsAnalysis
                 LocationRelativeToClass = locationStore.LocationsRelativeToClass[LineEnd].Location;
                 Class @class = classStore.Classes.Single(c => c.Name == locationStore.LocationsRelativeToClass[LineEnd].Class.Name
                     && c.Namespace == locationStore.LocationsRelativeToClass[LineEnd].Class.Namespace);
+                @class.Comments.Add(this);
                 this.Class = @class;
             }
 
@@ -78,15 +79,7 @@ namespace CommentsAnalysis
             {
                 return true;
             }
-            if (CoherenceCoefficient != null && (CoherenceCoefficient == 0 || CoherenceCoefficient > 0.5))
-            {
-                return true;
-            }
-            if ((WordsCount != null || WordsCount != 0) && (WordsCount <= 2 || WordsCount > 30))
-            {
-                return true;
-            }
-            return false;
+            return IsBadCoherenceCoefficient() == true || IsBadWordsCount() == true;
         }
 
         public bool? IsBadCoherenceCoefficient()
