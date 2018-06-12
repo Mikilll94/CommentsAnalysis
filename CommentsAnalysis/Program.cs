@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CommentsAnalysis
@@ -12,13 +13,13 @@ namespace CommentsAnalysis
         //static string designiteFileName = "Designite_GitExtensions.xls";
         //static string solutionName = "GitExtensions";
 
-        static string folderName = "EntityFrameworkCore";
-        static string designiteFileName = "Designite_EFCore.xls";
-        static string solutionName = "EFCore";
+        //static string folderName = "EntityFrameworkCore";
+        //static string designiteFileName = "Designite_EFCore.xls";
+        //static string solutionName = "EFCore";
 
-        //static string folderName = "ScreenToGif";
-        //static string designiteFileName = "Designite_GifRecorder.xls";
-        //static string solutionName = "GifRecorder";
+        static string folderName = "ScreenToGif";
+        static string designiteFileName = "Designite_GifRecorder.xls";
+        static string solutionName = "GifRecorder";
 
         static void Main(string[] args)
         {
@@ -29,7 +30,8 @@ namespace CommentsAnalysis
             SyntaxNode root;
             CommentsWalker commentWalker;
             MethodsAndClassesWalker methodWalker;
-            string[] files = Directory.GetFiles($@"../../../../Projects/{folderName}", $"*.cs", SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles($@"../../../../Projects/{folderName}", $"*.cs", SearchOption.AllDirectories)
+                .Where(s => !s.EndsWith(".Designer.cs",StringComparison.InvariantCultureIgnoreCase)).ToArray();
             var commentStore = new CommentStore();
             var classStore = new ClassStore();
 

@@ -8,12 +8,10 @@ namespace CommentsAnalysis
     class ClassesWithMostComments : Worksheet
     {
         private ClassStore _classStore;
-        private CommentStore _commentStore;
 
-        public ClassesWithMostComments(ExcelPackage package, CommentStore commentStore, ClassStore classStore) : base(package)
+        public ClassesWithMostComments(ExcelPackage package, ClassStore classStore) : base(package)
         {
             _classStore = classStore;
-            _commentStore = commentStore;
         }
 
         protected override void WriteHeaders(ExcelWorksheet worksheet)
@@ -42,46 +40,38 @@ namespace CommentsAnalysis
 
         protected override void WriteData(ExcelWorksheet worksheet)
         {
-            Class[] classes = _classStore.Classes.OrderByDescending(@class => 
-                _commentStore.Comments.Count(c => @class.Name == c.Class?.Name && @class.FileName == c.FileName)).ToArray();
-
-            List<Class> classesWithMostComments = new List<Class>();
-            List<Class> restOfClasses = new List<Class>();
+            Class[] classes = _classStore.Classes.OrderByDescending(c => c.Comments.Count()).ToArray();
 
             int rowNo = 2;
 
             foreach (var @class in classes)
             {
-                int commentsCount = _commentStore.Comments.Count(c => @class.Name == c.Class?.Name && @class.FileName == c.FileName);
-
                 worksheet.Cells[rowNo, 1].Value = @class.FileName;
                 worksheet.Cells[rowNo, 2].Value = @class.Name;
-                worksheet.Cells[rowNo, 3].Value = commentsCount;
+                worksheet.Cells[rowNo, 3].Value = @class.Comments.Count();
                 worksheet.Cells[rowNo, 4].Value = @class.SmellsCount;
                 worksheet.Cells[rowNo, 5].Value = @class.AbstractionSmellsCount;
                 worksheet.Cells[rowNo, 6].Value = @class.EncapsulationSmellsCount;
                 worksheet.Cells[rowNo, 7].Value = @class.ModularizationSmellsCount;
                 worksheet.Cells[rowNo, 8].Value = @class.HierarchySmellsCount;
 
-                if (commentsCount >= 10)
-                    classesWithMostComments.Add(@class);
-                else
-                    restOfClasses.Add(@class);
-
                 rowNo++;
             }
 
-            worksheet.Cells["K5"].Value = Math.Round((double)classesWithMostComments.Select(c => c.SmellsCount).Sum() / classesWithMostComments.Count, 3);
-            worksheet.Cells["L5"].Value = Math.Round((double)classesWithMostComments.Select(c => c.AbstractionSmellsCount).Sum() / classesWithMostComments.Count, 3);
-            worksheet.Cells["M5"].Value = Math.Round((double)classesWithMostComments.Select(c => c.EncapsulationSmellsCount).Sum() / classesWithMostComments.Count, 3);
-            worksheet.Cells["N5"].Value = Math.Round((double)classesWithMostComments.Select(c => c.ModularizationSmellsCount).Sum() / classesWithMostComments.Count, 3);
-            worksheet.Cells["O5"].Value = Math.Round((double)classesWithMostComments.Select(c => c.HierarchySmellsCount).Sum() / classesWithMostComments.Count, 3);
+            IEnumerable<Class> classesWithMostComments = _classStore.Classes.Where(c => c.Comments.Count() >= 10);
+            IEnumerable<Class> restOfClasses = _classStore.Classes.Where(c => c.Comments.Count() < 10);
 
-            worksheet.Cells["K6"].Value = Math.Round((double)restOfClasses.Select(c => c.SmellsCount).Sum() / restOfClasses.Count, 3);
-            worksheet.Cells["L6"].Value = Math.Round((double)restOfClasses.Select(c => c.AbstractionSmellsCount).Sum() / restOfClasses.Count, 3);
-            worksheet.Cells["M6"].Value = Math.Round((double)restOfClasses.Select(c => c.EncapsulationSmellsCount).Sum() / restOfClasses.Count, 3);
-            worksheet.Cells["N6"].Value = Math.Round((double)restOfClasses.Select(c => c.ModularizationSmellsCount).Sum() / restOfClasses.Count, 3);
-            worksheet.Cells["O6"].Value = Math.Round((double)restOfClasses.Select(c => c.HierarchySmellsCount).Sum() / restOfClasses.Count, 3);
+            worksheet.Cells["K5"].Value = Math.Round(classesWithMostComments.Average(c => c.SmellsCount), 3);
+            worksheet.Cells["L5"].Value = Math.Round(classesWithMostComments.Average(c => c.AbstractionSmellsCount), 3);
+            worksheet.Cells["M5"].Value = Math.Round(classesWithMostComments.Average(c => c.EncapsulationSmellsCount), 3);
+            worksheet.Cells["N5"].Value = Math.Round(classesWithMostComments.Average(c => c.ModularizationSmellsCount), 3);
+            worksheet.Cells["O5"].Value = Math.Round(classesWithMostComments.Average(c => c.HierarchySmellsCount), 3);
+
+            worksheet.Cells["K6"].Value = Math.Round(restOfClasses.Average(c => c.SmellsCount), 3);
+            worksheet.Cells["L6"].Value = Math.Round(restOfClasses.Average(c => c.AbstractionSmellsCount), 3);
+            worksheet.Cells["M6"].Value = Math.Round(restOfClasses.Average(c => c.EncapsulationSmellsCount), 3);
+            worksheet.Cells["N6"].Value = Math.Round(restOfClasses.Average(c => c.ModularizationSmellsCount), 3);
+            worksheet.Cells["O6"].Value = Math.Round(restOfClasses.Average(c => c.HierarchySmellsCount), 3);
         }
 
         protected override void FitColumns(ExcelWorksheet worksheet)
