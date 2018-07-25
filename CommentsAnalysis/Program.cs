@@ -9,17 +9,17 @@ namespace CommentsAnalysis
 {
     class Program
     {
-        //static string folderName = "gitextensions";
-        //static string designiteFileName = "Designite_GitExtensions.xls";
-        //static string solutionName = "GitExtensions";
+        static string folderName = "gitextensions";
+        static string designiteFileName = "Designite_GitExtensions.xls";
+        static string solutionName = "GitExtensions";
 
         //static string folderName = "EntityFrameworkCore";
         //static string designiteFileName = "Designite_EFCore.xls";
         //static string solutionName = "EFCore";
 
-        static string folderName = "ScreenToGif";
-        static string designiteFileName = "Designite_GifRecorder.xls";
-        static string solutionName = "GifRecorder";
+        //static string folderName = "ScreenToGif";
+        //static string designiteFileName = "Designite_GifRecorder.xls";
+        //static string solutionName = "GifRecorder";
 
         static void Main(string[] args)
         {
@@ -28,10 +28,10 @@ namespace CommentsAnalysis
             string fileContent;
             SyntaxTree tree;
             SyntaxNode root;
-            CommentsWalker commentWalker;
-            MethodsAndClassesWalker methodWalker;
+            CommentsWalker commentsWalker;
+            MethodsAndClassesWalker methodsAndClassesWalker;
             string[] files = Directory.GetFiles($@"../../../../Projects/{folderName}", $"*.cs", SearchOption.AllDirectories)
-                .Where(s => !s.EndsWith(".Designer.cs",StringComparison.InvariantCultureIgnoreCase)).ToArray();
+                .Where(s => !s.EndsWith(".designer.cs",StringComparison.InvariantCultureIgnoreCase)).ToArray();
             var commentStore = new CommentStore();
             var classStore = new ClassStore();
 
@@ -48,10 +48,10 @@ namespace CommentsAnalysis
                 var locationStore = new LocationStore();
                 string filePath = new Regex($@"{folderName}\\(.*)").Match(file).Groups[1].ToString();
 
-                methodWalker = new MethodsAndClassesWalker(filePath, locationStore, classStore);
-                methodWalker.Visit(root);
-                commentWalker = new CommentsWalker(filePath, locationStore, commentStore, classStore);
-                commentWalker.Visit(root);
+                methodsAndClassesWalker = new MethodsAndClassesWalker(filePath, locationStore, classStore);
+                methodsAndClassesWalker.Visit(root);
+                commentsWalker = new CommentsWalker(filePath, locationStore, commentStore, classStore);
+                commentsWalker.Visit(root);
 
                 progressBar.UpdateAndDisplay();
             }
