@@ -48,9 +48,9 @@ namespace CommentsAnalysis
                 excelRowWriter.WriteCell(7, comment.HasQuestionMark, comment.HasQuestionMark);
                 excelRowWriter.WriteCell(8, comment.HasCode, comment.HasCode);
                 excelRowWriter.WriteCell(9, comment.CoherenceCoefficient, comment.IsBadCoherenceCoefficient());
-                excelRowWriter.WriteCell(10, comment.LocationRelativeToMethod);
+                excelRowWriter.WriteCell(10, comment.LocationRelativeToMethod == LocationRelativeToMethod.None ? (object)null : comment.LocationRelativeToMethod);
                 excelRowWriter.WriteCell(11, comment.MethodName);
-                excelRowWriter.WriteCell(12, comment.LocationRelativeToClass);
+                excelRowWriter.WriteCell(12, comment.LocationRelativeToClass == LocationRelativeToClass.None ? (object)null : comment.LocationRelativeToClass);
                 excelRowWriter.WriteCell(13, comment.Class?.Name);
                 excelRowWriter.WriteCell(14, comment.Class?.IsSmelly(), comment.Class?.IsSmelly());
                 excelRowWriter.WriteCell(15, comment.IsBad(), comment.IsBad());

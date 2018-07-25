@@ -4,6 +4,7 @@ namespace CommentsAnalysis
 {
     public enum LocationRelativeToMethod
     {
+        None,
         MethodDescription,
         MethodStart,
         MethodInner,
@@ -12,6 +13,7 @@ namespace CommentsAnalysis
 
     public enum LocationRelativeToClass
     {
+        None,
         ClassDescription,
         ClassStart,
         ClassInner,
